@@ -2,7 +2,7 @@
   <div id="app">
     <el-container>
       <el-header>
-<!--        <div>MY HEADER</div>-->
+        <myHeader></myHeader>
       </el-header>
       <el-main>
         <el-row type="flex" justify="center" align="middle">
@@ -14,9 +14,11 @@
 </template>
 
 <script>
+import myHeader from "@/components/Header";
 
 export default {
-  name: 'App'
+  name: 'App',
+  components: { myHeader }
 }
 </script>
 
