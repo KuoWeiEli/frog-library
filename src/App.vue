@@ -1,28 +1,37 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-container>
+      <el-header>
+<!--        <div>MY HEADER</div>-->
+      </el-header>
+      <el-main>
+        <el-row type="flex" justify="center" align="middle">
+          <router-view></router-view>
+        </el-row>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  name: 'App'
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /*text-align: center;*/
   color: #2c3e50;
-  margin-top: 60px;
+  /*margin-top: 60px;*/
 }
+
+.el-row {
+  height: 87vh;  /* set the height of el-row, let the align attribute can work */
+}
+
 </style>
