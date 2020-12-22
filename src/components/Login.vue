@@ -1,17 +1,19 @@
 <template>
-  <el-col :span="8">
-    <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
-      <el-form-item prop="email">
-        <el-input v-model="form.email" placeholder="email..."></el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input type="password" v-model="form.password" placeholder="password..." autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="loginBtn" type="primary" @click="submit('loginForm')">Login</el-button>
-      </el-form-item>
-    </el-form>
-  </el-col>
+  <el-row type="flex" justify="center" align="middle">
+    <el-col :span="8">
+      <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
+        <el-form-item prop="email">
+          <el-input v-model="form.email" placeholder="email..."></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" v-model="form.password" placeholder="password..." autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="loginBtn" type="primary" @click="submit('loginForm')">Login</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -72,5 +74,9 @@ export default {
 
 .loginBtn {
   width: 100%;
+}
+
+.el-row {
+  height: 87vh;  /* set the height of el-row, let the align attribute can work */
 }
 </style>

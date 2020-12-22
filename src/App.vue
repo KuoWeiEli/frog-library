@@ -5,7 +5,7 @@
         <myHeader></myHeader>
       </el-header>
       <el-main>
-        <el-row type="flex" justify="center" align="middle">
+        <el-row>
           <router-view></router-view>
         </el-row>
       </el-main>
@@ -30,10 +30,6 @@ export default {
   /*text-align: center;*/
   color: #2c3e50;
   /*margin-top: 60px;*/
-}
-
-.el-row {
-  height: 87vh;  /* set the height of el-row, let the align attribute can work */
 }
 
 </style>

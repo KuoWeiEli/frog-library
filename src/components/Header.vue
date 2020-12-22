@@ -24,7 +24,7 @@
 </template>
 <script>
 export default {
-  name: 'header',
+  name: 'myHeader',
   data() {
     return {
       activeIndex: '1'
