@@ -3,7 +3,7 @@
       :data="products"
       stripe
       style="width: 100%"
-      height="400"
+      height="800"
       size="small">
     <el-table-column
         label="操作"

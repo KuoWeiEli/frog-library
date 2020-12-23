@@ -1,6 +1,10 @@
 <template>
-  <el-row type="flex" justify="center" align="middle">
+  <el-row class="login" type="flex" justify="center" align="middle">
     <el-col :span="8">
+      <div class="logo">
+        <img src="../assets/frog_jump_circle.png" height="296" width="296" alt="德義公司LOGO"/>
+        <h1>德義資訊圖書管理系統</h1>
+      </div>
       <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
         <el-form-item prop="email">
           <el-input v-model="form.email" placeholder="email..."></el-input>
@@ -40,7 +44,7 @@ export default {
         email: [
           {required: true, message: 'Please input your email', trigger: 'blur'},
           {
-            pattern: /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
+            pattern: /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
             message: '請輸入正確的 Email 格式！', trigger: 'blur'
           }
         ],
@@ -76,7 +80,11 @@ export default {
   width: 100%;
 }
 
-.el-row {
+.logo {
+  text-align: center;
+}
+
+.login {
   height: 87vh;  /* set the height of el-row, let the align attribute can work */
 }
 </style>
