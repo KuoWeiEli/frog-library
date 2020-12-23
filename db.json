@@ -16,7 +16,7 @@
   "profile": {
     "name": "typicode"
   },
-  "products": [
+  "libraryInfo": [
     {
       "bookSeq": "201703001",
       "bookName": "Java 8 Lambdas 技術手冊",
