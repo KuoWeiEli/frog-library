@@ -1,14 +1,13 @@
 <template>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
-    <el-menu-item index="0" route="/LibraryInfo">館藏資訊</el-menu-item>
+    <el-menu-item index="0" route="/library-info">館藏資訊</el-menu-item>
     <el-submenu index="1">
       <template slot="title">紀錄</template>
-      <el-menu-item index="1-1" route="/deliver/work">預約紀錄</el-menu-item>
-      <el-menu-item index="1-2" route="/deliver/work">借閱紀錄</el-menu-item>
+      <el-menu-item index="1-1" route="/">預約紀錄</el-menu-item>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">管理</template>
-      <el-menu-item index="2-1">員工管理</el-menu-item>
+      <el-menu-item index="/user-management">員工管理</el-menu-item>
       <el-menu-item index="2-2">書庫管理</el-menu-item>
       <el-menu-item index="2-3">預約管理</el-menu-item>
     </el-submenu>

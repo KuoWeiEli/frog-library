@@ -16,6 +16,33 @@
   "profile": {
     "name": "typicode"
   },
+  "users": [
+    {
+      "userSeq": "1",
+      "empId": "0400",
+      "empName": "黃國維",
+      "email": "eli.huang@frog-jump.com",
+      "password": "1234",
+      "status": "在職"
+    },
+    {
+      "userSeq": "2",
+      "empId": "9001",
+      "empName": "小龍女",
+      "email": "dragon_girl@frog-jump.com",
+      "password": "1234",
+      "status": "留職停薪"
+    },
+    {
+      "userSeq": "3",
+      "empId": "9002",
+      "empName": "楊過",
+      "email": "yakuo@frog-jump.com",
+      "password": "1234",
+      "status": "離職"
+    }
+  ],
+
   "libraryInfo": [
     {
       "bookSeq": "201703001",

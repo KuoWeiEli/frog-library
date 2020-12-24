@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 // component
 import login from '@/components/Login'
 import LibraryInfo from "@/components/LibraryInfo";
+import UserManagement from "@/components/user/UserManagement";
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,8 @@ const router = new VueRouter({
     routes: [
         {path: '/', component: login},
         {path: '/login', component: login},
-        {path: '/LibraryInfo', component: LibraryInfo}
+        {path: '/library-info', component: LibraryInfo},
+        {path: '/user-management', component: UserManagement}
     ]
 })
 
