@@ -1019,5 +1019,683 @@
       "bookStatus": "可借閱",
       "waitNum": 0
     }
+  ],
+
+  "books": [
+    {
+      "bookSeq": "201703001",
+      "bookName": "Java 8 Lambdas 技術手冊",
+      "author": "Richard Warburton",
+      "tech": "Java",
+      "publisher": "歐萊禮",
+      "publishDate": "2014/11/21",
+      "status": "破損"
+    },
+    {
+      "bookSeq": "201703002",
+      "bookName": "Java Web整合開發-JSP+Servlet+Struts+Hibernate+Spring(第三版)",
+      "author": "劉京華等",
+      "tech": "JSP+Servlet+Struts+Hibernate+Spring",
+      "publisher": "佳魁資訊",
+      "publishDate": "2013/3/22",
+      "status": "遺失"
+    },
+    {
+      "bookSeq": "201703003",
+      "bookName": "深入淺出 HTML5 程式設計",
+      "author": "Eric Freeman、Elisabeth Robson",
+      "tech": "HTML5",
+      "publisher": "歐萊禮",
+      "publishDate": "2012/6/20",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703004",
+      "bookName": "Java SE7/8 OCPJP進階認證指南：擬真試題實戰",
+      "author": "曾瑞君",
+      "tech": "OCPJP",
+      "publisher": "博碩",
+      "publishDate": "2016/9/6",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703005",
+      "bookName": "Java程式設計師的職場進化之路",
+      "author": "吳亞峰/著，杜維仁/審校",
+      "tech": "Java",
+      "publisher": "博碩",
+      "publishDate": "2012/8/16",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703006",
+      "bookName": "Node.js模組參考手冊",
+      "author": "錢逢祥, 蔡政崇, 楊傑文",
+      "tech": "Node.js",
+      "publisher": "松崗",
+      "publishDate": "2015/4/15",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703007",
+      "bookName": "Angular JS快速上手實務範例教學",
+      "author": "姜琇森、蕭國倫、蔣宜成、蕭盟興",
+      "tech": "AngularJS",
+      "publisher": "佳魁資訊",
+      "publishDate": "2015/11/30",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703008",
+      "bookName": "無瑕的程式碼－敏捷軟體開發技巧守則",
+      "author": "Robert C. Martin ，戴于晉、博碩文化譯",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2013/3/22",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703009",
+      "bookName": "無瑕的程式碼 番外篇：專業程式設計師的生存之道",
+      "author": "Robert C. Martin ，陳錦輝譯",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2013/8/27",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703010",
+      "bookName": "深入淺出Servlets與JSP",
+      "author": "Bryan Basham, Kathy Sierra, Bert Bates ，楊仁和譯",
+      "tech": "Servlets、JSP",
+      "publisher": "歐萊禮",
+      "publishDate": "2008/9/23",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703011",
+      "bookName": "深入探索Scala集合技術手冊",
+      "author": "晁岳攀",
+      "tech": "Scala",
+      "publisher": "松崗",
+      "publishDate": "2016/11/9",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703012",
+      "bookName": "重構-改善既有程式的設計(第二版)",
+      "author": "Martin Fowler，侯捷、熊節譯",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2008/7/30",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703013",
+      "bookName": "React 啟動與運行",
+      "author": "Stoyan Stefanov，楊仁和譯",
+      "tech": "React",
+      "publisher": "碁峰",
+      "publishDate": "2017/1/3",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703014",
+      "bookName": "AngularJS建置與執行",
+      "author": "Shyam Seshadri, Brad Green，陳仁和譯",
+      "tech": "AngularJS",
+      "publisher": "碁峰",
+      "publishDate": "2015/3/24",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703015",
+      "bookName": "Kent Beck的實作模式",
+      "author": "Kent Beck",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2013/9/30",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703016",
+      "bookName": "JAVA經典範例第二版",
+      "author": "David Flanagan著，趙光正譯",
+      "tech": "",
+      "publisher": "歐萊禮",
+      "publishDate": "2002/5/15",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703017",
+      "bookName": "Thinking in Java 4 e中文版",
+      "author": "王建興、王舜正",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2008/8/12",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703018",
+      "bookName": "從 HTML5+CSS3+JavaScript 到 jQuery+Node.js 程式設計",
+      "author": "陳會安",
+      "tech": "",
+      "publisher": "旗標",
+      "publishDate": "2016/11/28",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703019",
+      "bookName": "挫折療癒系: Android App開發入門一定要懂的128個觀念 (附光碟)",
+      "author": "飯塚康至著",
+      "tech": "Android",
+      "publisher": "旗標",
+      "publishDate": "2013/7/19",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703020",
+      "bookName": "七天學會設計模式：設計模式也可以這樣學",
+      "author": "Yan(硯取歪)",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2017/4/24",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703021",
+      "bookName": "SCRUM：用一半的時間做兩倍的事",
+      "author": "Jeff Sutherland著，江裕真譯",
+      "tech": "",
+      "publisher": "天下文化",
+      "publishDate": "2015/4/29",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703022",
+      "bookName": "UML系統分析與設計實務(第二版)",
+      "author": "陳會安",
+      "tech": "",
+      "publisher": "旗標",
+      "publishDate": "2016/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703023",
+      "bookName": "大話設計模式",
+      "author": "程杰",
+      "tech": "",
+      "publisher": "悅知文化",
+      "publishDate": "2016/3/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703024",
+      "bookName": "完整學會Git、GitHub、Git Server的24堂課",
+      "author": "孫宏明",
+      "tech": "Git",
+      "publisher": "碁峰",
+      "publishDate": "2017/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703025",
+      "bookName": "Cassandra技術手冊(第二版)",
+      "author": "Jeff Carpenter & Eben Hewitt著，許致軒譯",
+      "tech": "",
+      "publisher": "歐萊禮",
+      "publishDate": "2017/8/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703026",
+      "bookName": "Java EE開發的顛覆者-Spring Boot實戰",
+      "author": "汪云飛編著",
+      "tech": "Spring Boot",
+      "publisher": "電子工業出版社",
+      "publishDate": "2016/3/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703027",
+      "bookName": "Spring Cloud與Docker微服務架構實戰",
+      "author": "周立著",
+      "tech": "Docker",
+      "publisher": "電子工業出版社",
+      "publishDate": "2017/5/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201703028",
+      "bookName": "Java SE 8與Android 7.x 程式設計範例教本",
+      "author": "陳會安著",
+      "tech": "Java SE、Android",
+      "publisher": "碁峰",
+      "publishDate": "2017/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800001",
+      "bookName": "Java 9模組化-可維護應用程式的開發模式與實務",
+      "author": "Sander Mak & Paul Bakker著，賴屹民譯",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2018/2/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800002",
+      "bookName": "Java微服務實戰",
+      "author": "趙計剛著",
+      "tech": "",
+      "publisher": "電子工業出版社",
+      "publishDate": "2017/11/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800003",
+      "bookName": "建構微服務-設計細微化的系統",
+      "author": "Sam Newman著，楊仁和譯",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2016/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800004",
+      "bookName": "React學習手冊-運用React與Redux進行網頁開發",
+      "author": "Alex Banks & Eve Porcello著，楊尊一譯",
+      "tech": "React",
+      "publisher": "碁峰",
+      "publishDate": "2017/11/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800005",
+      "bookName": "AngularJS必學的90項實務秘方",
+      "author": "Matt Frisbie著，廖信彥譯",
+      "tech": "AngularJS",
+      "publisher": "博碩",
+      "publishDate": "2015/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800006",
+      "bookName": "Agile成功法則-敏捷實作者的解決方案",
+      "author": "Daniel James Gullo著，莊弘祥譯",
+      "tech": "Agile",
+      "publisher": "碁峰",
+      "publishDate": "2017/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800007",
+      "bookName": "Angular 2其實可以很簡單-實務範例教學",
+      "author": "姜琇森、吳其聯、王柏皓、蔣宜成、蕭盟興",
+      "tech": "Angular",
+      "publisher": "佳魁資訊",
+      "publishDate": "2017/9/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800008",
+      "bookName": "Angular 權威教程",
+      "author": "Ari Lerner 等4人著",
+      "tech": "Angular",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2017/4/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800009",
+      "bookName": "深入淺出MyBatis技術原理與實戰",
+      "author": "楊開振著",
+      "tech": "MyBatis",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2016/9/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800010",
+      "bookName": "Continuous Delivery中文版",
+      "author": "Jez Humble、Devid Farley著，喬梁 譯",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2014/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800011",
+      "bookName": "Effective DevOps中文版",
+      "author": "Jennifer Davis & Ryn Daniels著，陳正瑋譯",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2018/5/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800012",
+      "bookName": "軟件開發本質論：追求簡約、體現價值、逐步建構",
+      "author": "Ron Jerrries著、王凌云譯",
+      "tech": "",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2017/1/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800013",
+      "bookName": "Ansible建置與執行",
+      "author": "Lorin Hochstein & Rene Moser著、 何敏煌 譯",
+      "tech": "Ansible",
+      "publisher": "碁峰",
+      "publishDate": "2018/7/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800014",
+      "bookName": "Vue.js最完整實例作戰",
+      "author": "梁睿坤著",
+      "tech": "Vue.js",
+      "publisher": "佳魁資訊",
+      "publishDate": "2018/3/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800015",
+      "bookName": "Angular 5 高級編程(第2版)",
+      "author": "Adam Freeman著、楊明軍、顏炯等譯",
+      "tech": "Angular",
+      "publisher": "清華大學出版社",
+      "publishDate": "2018/1/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800016",
+      "bookName": "Spring 實戰(第4版)",
+      "author": "Craig Walls著、張衛濱譯",
+      "tech": "Spring",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2016/4/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800017",
+      "bookName": "RWD網頁程式設計-用HTML5、CSS3、Bootstrap打造響應式網頁",
+      "author": "陳惠貞著",
+      "tech": "RWD",
+      "publisher": "旗標",
+      "publishDate": "2018/7/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800018",
+      "bookName": "Docker入門與實戰第二版",
+      "author": "楊保華/戴王劍/曹亞侖著",
+      "tech": "Docker",
+      "publisher": "碁峰",
+      "publishDate": "2017/7/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800019",
+      "bookName": "用新一代Node.js把後端也搞定",
+      "author": "李鍇編著",
+      "tech": "Node.js",
+      "publisher": "佳魁資訊",
+      "publishDate": "2018/7/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800020",
+      "bookName": "深入淺出Spring Boot 2.x",
+      "author": "楊開振著",
+      "tech": "Spring Boot",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2018/8/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800021",
+      "bookName": "DevOps實踐指南",
+      "author": "Gene Kim、Jez Humble、Patrick Debois、John Willis著",
+      "tech": "",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2018/4/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800022",
+      "bookName": "深入淺出Agile",
+      "author": "Andrew Stellman、Jennifer Greene著",
+      "tech": "",
+      "publisher": "碁峰",
+      "publishDate": "2018/9/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800023",
+      "bookName": "Jenkins權威指南",
+      "author": "John Ferguson Smart著",
+      "tech": "Jenkins",
+      "publisher": "電子工業出版社",
+      "publishDate": "2016/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201800024",
+      "bookName": "Elasticsearch 實戰",
+      "author": "[美] 拉杜·喬戈 馬修·李·欣曼羅伊·羅素",
+      "tech": "",
+      "publisher": "人民郵電出版社",
+      "publishDate": "2018/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900001",
+      "bookName": "Spring 5高級編程(第5版)",
+      "author": "Iuliana Cosmina等4人著，王凈譯",
+      "tech": "Spring",
+      "publisher": "清華大學出版社",
+      "publishDate": "2019/1/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900002",
+      "bookName": "Code Complete 2中文版_軟體開發實務指南",
+      "author": "Steve McConnell，金戈等4人譯",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2018/11/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900003",
+      "bookName": "無瑕的程式碼-整潔的軟體設計與架構篇",
+      "author": "Robert C. Martin ，林欣穎譯",
+      "tech": "",
+      "publisher": "博碩",
+      "publishDate": "2019/1/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900004",
+      "bookName": "Vue.js2 前端漸進式建構框架實戰應用",
+      "author": "黃聰明",
+      "tech": "Vue.js",
+      "publisher": "碁峰",
+      "publishDate": "2019/4/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900005",
+      "bookName": "Java JSP經典案例解析",
+      "author": "賈蓉生、胡大源、胡心鎰 編著",
+      "tech": "JSP",
+      "publisher": "松崗",
+      "publishDate": "2009/12/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900006",
+      "bookName": "Spring Data技術手冊",
+      "author": "Mark Pollack,Oliver Gierke,Thomas Risberg,Jonathan L. Brisbin,& Michael Hunger著、 賴屹民 譯",
+      "tech": "",
+      "publisher": "歐萊禮",
+      "publishDate": "2013/3/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900007",
+      "bookName": "持續交付 使用Java",
+      "author": "Daniel Bryant & Abraham Marin-Perez著、 賴屹民 譯",
+      "tech": "",
+      "publisher": "歐萊禮",
+      "publishDate": "2019/7/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900008",
+      "bookName": "Python機器學習錦囊妙計",
+      "author": "Chris Albon著，陳健文譯",
+      "tech": "Python",
+      "publisher": "歐萊禮",
+      "publishDate": "2019/9/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900009",
+      "bookName": "Python最強入門邁向頂尖高手之路王者歸來",
+      "author": "洪錦魁著",
+      "tech": "Python",
+      "publisher": "深智",
+      "publishDate": "2019/9/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900010",
+      "bookName": "Python與LINE Bot機器人全面實戰特訓班",
+      "author": "文淵閣工作室 編著",
+      "tech": "Python",
+      "publisher": "碁峰",
+      "publishDate": "2019/8/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900011",
+      "bookName": "再也不踩坑的Kubernetes實戰指南",
+      "author": "杜寬 編著",
+      "tech": "Kubernetes",
+      "publisher": "清華大學出版社",
+      "publishDate": "2019/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "201900012",
+      "bookName": "Servlet & JSP技術手冊-從Servlet到Spring Boot",
+      "author": "林信良",
+      "tech": "Servlet、JSP、Spring Boot",
+      "publisher": "碁峰",
+      "publishDate": "2018/4/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000001",
+      "bookName": "C#程式設計入門與實務-百分百自學手冊",
+      "author": "彭建文著",
+      "tech": "C#",
+      "publisher": "博碩",
+      "publishDate": "2020/2/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000002",
+      "bookName": "ASP.NET專題實務1-C#入門實戰",
+      "author": "周棟祥、MIS2000 Lab、吳進魯",
+      "tech": "ASP.NET",
+      "publisher": "博碩",
+      "publishDate": "2019/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000003",
+      "bookName": "ASP.NET專題實務2-C#進階範例應用",
+      "author": "周棟祥、MIS2000 Lab、吳進魯",
+      "tech": "ASP.NET",
+      "publisher": "博碩",
+      "publishDate": "2019/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000004",
+      "bookName": "Spring Boot情境式網站開發指南",
+      "author": "曾瑞君著",
+      "tech": "Spring Boot",
+      "publisher": "碁峰資訊",
+      "publishDate": "2020/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000005",
+      "bookName": "Spring Cloud極致精巧的微服務架構開發技術",
+      "author": "翟永超著",
+      "tech": "Spring Cloud",
+      "publisher": "佳魁資訊",
+      "publishDate": "2019/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000006",
+      "bookName": "Spring Cloud微服務架構實戰",
+      "author": "陳韶健著",
+      "tech": "Spring Cloud",
+      "publisher": "電子工業出版社",
+      "publishDate": "2020/3/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000007",
+      "bookName": "Kubernetes建置與執行(第二版)",
+      "author": "Brendan Burns,Joe Beda & Kelsey Hightower著林毅民、謝智皓譯",
+      "tech": "Kubernetes",
+      "publisher": "歐萊禮",
+      "publishDate": "2020/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000008",
+      "bookName": "Kubernetes最佳實務",
+      "author": "Brendan Burns,Eddie Villalba,Dave Strebel & Lachlan Evenson著林班侯譯",
+      "tech": "Kubernetes",
+      "publisher": "歐萊禮",
+      "publishDate": "2020/6/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000009",
+      "bookName": "AI思維-不需艱深技術，不用鉅額投資，任何企業都適用的進化關鍵",
+      "author": "周忠信著",
+      "tech": "",
+      "publisher": "商周出版",
+      "publishDate": "2020/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000010",
+      "bookName": "想死不如健身-改變醫生的超科學理由，破除99%肌力訓練迷思、疑慮的終極動力手冊",
+      "author": "泰史特龍、久保孝史著，劉格安譯",
+      "tech": "",
+      "publisher": "一起來出版",
+      "publishDate": "2020/10/1",
+      "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000011",
+      "bookName": "健身新手重訓攻略-完全圖解版",
+      "author": "荒川裕志著，黃筱涵譯",
+      "tech": "",
+      "publisher": "采實文化",
+      "publishDate": "2020/9/1",
+      "status": "可供借閱"
+    }
   ]
 }

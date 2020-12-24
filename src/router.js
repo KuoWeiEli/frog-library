@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import login from '@/components/Login'
 import LibraryInfo from "@/components/LibraryInfo";
 import UserManagement from "@/components/user/UserManagement";
+import BookManagement from "@/components/book/BookManagement";
 
 Vue.use(VueRouter)
 
@@ -14,7 +15,8 @@ const router = new VueRouter({
         {path: '/', component: login},
         {path: '/login', component: login},
         {path: '/library-info', component: LibraryInfo},
-        {path: '/user-management', component: UserManagement}
+        {path: '/user-management', component: UserManagement},
+        {path: '/book-management', component: BookManagement},
     ]
 })
 

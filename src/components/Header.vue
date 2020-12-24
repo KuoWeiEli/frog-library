@@ -8,7 +8,7 @@
     <el-submenu index="2">
       <template slot="title">管理</template>
       <el-menu-item index="/user-management">員工管理</el-menu-item>
-      <el-menu-item index="2-2">書庫管理</el-menu-item>
+      <el-menu-item index="/book-management">書庫管理</el-menu-item>
       <el-menu-item index="2-3">預約管理</el-menu-item>
     </el-submenu>
     <el-submenu index="3">
