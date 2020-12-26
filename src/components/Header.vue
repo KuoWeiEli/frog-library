@@ -3,7 +3,7 @@
     <el-menu-item index="0" route="/library-info">館藏資訊</el-menu-item>
     <el-submenu index="1">
       <template slot="title">紀錄</template>
-      <el-menu-item index="1-1" route="/">預約紀錄</el-menu-item>
+      <el-menu-item index="1-1" route="/my-reservation">預約紀錄</el-menu-item>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">管理</template>
