@@ -19,32 +19,38 @@
       <el-table-column
           prop="bookSeq"
           label="序號"
-          width="100">
+          width="100"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="bookName"
           label="書刊名"
-          width="500">
+          width="500"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="author"
           label="作者"
-          width="550">
+          width="550"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="tech"
           label="技術"
-          width="250">
+          width="250"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="publisher"
           label="出版社"
-          width="80">
+          width="80"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="publishDate"
           label="出版年"
-          width="100">
+          width="100"
+          sortable>
       </el-table-column>
       <el-table-column
           prop="empId"

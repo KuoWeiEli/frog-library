@@ -1,8 +1,8 @@
 <template>
-  <el-dialog :visible="appointment.visible" title="申請預約" :show-close="false" @closed="dialogClose">
+  <el-dialog :visible="appointment.visible" title="申請預約" :show-close="false" @open="dialogOpen" @closed="dialogClose">
     <el-form ref="appointmentForm" :model="appointmentForm" :rules="rules" status-icon>
       <el-form-item label="書名" :label-width="formLabelWidth" prop="bookName">
-        <el-input v-model="appointment.bookData.bookName" autocomplete="off" readonly></el-input>
+        <el-input v-model="appointmentForm.bookName" autocomplete="off" readonly></el-input>
       </el-form-item>
       <el-form-item label="申請人" :label-width="formLabelWidth" prop="applicant">
         <el-input v-model="appointmentForm.applicant" autocomplete="off" readonly></el-input>
@@ -13,6 +13,7 @@
               v-model="appointmentForm.appointDate"
               type="date"
               placeholder="選擇日期"
+              value-format="yyyy-MM-dd"
               :picker-options="pickerOptions">
           </el-date-picker>
         </div>
@@ -38,15 +39,11 @@ export default {
   data() {
     return {
       formLabelWidth: '120px',
-      appointmentForm: {
-        bookName: this.appointment.bookData.bookName,
-        applicant: this.appointment.empData.empId + '-' + this.appointment.empData.empName,
-        appointDate: null
-      },
+      appointmentForm: {},
       rules: {
-        appointDate: {required: true, message: '請選擇預約時間'},
-        bookName: {required: true, message: '申請書目尚未選擇'},
-        applicant: {required: true, message: '申請人尚未選擇'}
+        appointDate: {required: true, message: '請選擇預約時間', trigger: 'blur'},
+        bookName: {required: true, message: '申請書目尚未選擇', trigger: 'blur'},
+        applicant: {required: true, message: '申請人尚未選擇', trigger: 'blur'}
       },
       pickerOptions: {
         disabledDate(time) {
@@ -70,10 +67,17 @@ export default {
         } else {
           this.$message({
             type: 'warning',
-            message: '預約時間尚未選擇!'
+            message: '尚有欄位未填寫完成!'
           })
         }
       })
+    },
+    dialogOpen() {
+      this.appointmentForm = {
+        bookName: this.appointment.bookData.bookName,
+        applicant: this.appointment.empData.empId + '-' + this.appointment.empData.empName,
+        appointDate: ''
+      }
     },
     dialogClose() {
       this.$refs['appointmentForm'].resetFields()
