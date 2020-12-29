@@ -7,6 +7,7 @@ import LibraryInfo from "@/components/LibraryInfo";
 import UserManagement from "@/components/user/UserManagement";
 import BookManagement from "@/components/book/BookManagement";
 import MyReservation from "@/components/record/MyReservation";
+import ReservationManagement from "@/components/reservation/ReservationManagement";
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,7 @@ const router = new VueRouter({
         {path: '/library-info', component: LibraryInfo},
         {path: '/user-management', component: UserManagement},
         {path: '/book-management', component: BookManagement},
+        {path: '/reservation-management', component: ReservationManagement},
         {path: '/my-reservation', component: MyReservation},
     ]
 })
