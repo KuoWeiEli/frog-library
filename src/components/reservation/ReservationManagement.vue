@@ -110,14 +110,18 @@
           width="100">
       </el-table-column>
     </el-table>
+
+    <reservation-management-dialog :management="management"/>
   </div>
 </template>
 
 <script>
 import axios from "axios"
+import ReservationManagementDialog from "@/components/reservation/ReservationManagementDialog";
 
 export default {
   name: "ReservationManagement",
+  components: {ReservationManagementDialog},
   created() {
     this.initial()
   },
