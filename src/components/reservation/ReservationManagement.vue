@@ -7,7 +7,7 @@
         style="width: 100%"
         ref="reservationsTable">
       <el-table-column
-          fixed
+          :fixed="!isMobile"
           align="center"
           label="操作"
           width="100">
@@ -19,7 +19,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          fixed
+          :fixed="!isMobile"
           sortable
           align="center"
           prop="status"
@@ -117,7 +117,8 @@
 
 <script>
 import axios from "axios"
-import ReservationManagementDialog from "@/components/reservation/ReservationManagementDialog";
+import ReservationManagementDialog from "@/components/reservation/ReservationManagementDialog"
+import device from "@/services/device"
 
 export default {
   name: "ReservationManagement",
@@ -127,6 +128,7 @@ export default {
   },
   data() {
     return {
+      isMobile: device.isMobile(),
       filters: {
         status: [],
         empId: [],

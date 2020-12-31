@@ -1,8 +1,8 @@
 <template>
   <el-row class="login" type="flex" justify="center" align="middle">
-    <el-col :span="8">
+    <el-col :md="8">
       <div class="logo">
-        <img src="../assets/frog_jump_circle.png" height="296" width="296" alt="德義公司LOGO"/>
+        <img src="../assets/frog_jump_circle.png" :height="logo.height" :width="logo.width" alt="德義公司LOGO"/>
         <h1>德義資訊圖書管理系統</h1>
       </div>
       <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
@@ -21,9 +21,18 @@
 </template>
 
 <script>
+import device from "@/services/device";
 
 export default {
   name: 'login',
+  created() {
+    if (device.isMobile()) {
+      this.logo = {
+        height: 100,
+        width: 100
+      }
+    }
+  },
   data() {
     // let checkEmail = (rule, value, callback) => {
     //   let emailReg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
@@ -36,6 +45,10 @@ export default {
     // };
 
     return {
+      logo: {
+        height: 296,
+        width: 296,
+      },
       form: {
         email: '',
         password: ''

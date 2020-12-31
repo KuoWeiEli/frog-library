@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible="appointment.visible" title="申請預約" :show-close="false" @open="dialogOpen" @closed="dialogClose">
+  <el-dialog width="500px" :visible="appointment.visible" title="申請預約" :show-close="false" @open="dialogOpen" @closed="dialogClose">
     <el-form ref="appointmentForm" :model="appointmentForm" :rules="rules" status-icon>
       <el-form-item label="書名" :label-width="formLabelWidth" prop="bookName">
         <el-input v-model="appointmentForm.bookName" autocomplete="off" readonly></el-input>
