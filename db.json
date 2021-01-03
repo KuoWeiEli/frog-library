@@ -1696,7 +1696,74 @@
       "publisher": "采實文化",
       "publishDate": "2020/9/1",
       "status": "可供借閱"
+    },
+    {
+      "bookSeq": "202000012",
+      "bookName": "峮峮個人寫真書-一見峮心",
+      "author": "峮峮",
+      "tech": "攝影",
+      "publisher": "尖端出版",
+      "publishDate": "2020/9/1",
+      "status": "可供借閱",
+      "url": "https://s.yimg.com/zp/MerchandiseImages/C6DF9D7640-SP-7294241.jpg",
+      "createDate": "2020/12/28"
+    },
+    {
+      "bookSeq": "202000013",
+      "bookName": "金魚都能懂的CSS選取器",
+      "author": "李建杭著",
+      "tech": "CSS",
+      "publisher": "博碩文化",
+      "publishDate": "2020/7/1",
+      "status": "可供借閱",
+      "url": "https://s.yimg.com/ut/api/res/1.2/_Q_k2SZc2p0uxkeW.d5hew--~B/YXBwaWQ9eXR3bWFsbDtjYz0zMTUzNjAwMDtoPTYwMDtxPTEwMDt3PTYwMA--/https://s.yimg.com/fy/ed7e/item/p0189220262729-item-852axf4x0896x0896-m.jpg",
+      "createDate": "2020/12/28"
+    },
+    {
+      "bookSeq": "202000014",
+      "bookName": "讓TypeScript成為你全端開發的ACE!",
+      "author": "黃俊鑫著",
+      "tech": "TypeScript",
+      "publisher": "博碩文化",
+      "publishDate": "2020/6/1",
+      "status": "可供借閱",
+      "url": "https://s.yimg.com/ut/api/res/1.2/BTEtjA6rQIpjv9LZmrsENg--~B/YXBwaWQ9eXR3bWFsbDtjYz0zMTUzNjAwMDtoPTYwMDtxPTEwMDt3PTYwMA--/https://s.yimg.com/fy/62f2/item/p0337208701243-item-bd9axf4x0750x0750-m.jpg",
+      "createDate": "2020/12/28"
+    },
+    {
+      "bookSeq": "202000015",
+      "bookName": "在React生態圈打滾的一年 feat. TypeScript",
+      "author": "黃冠霖著",
+      "tech": "React",
+      "publisher": "博碩文化",
+      "publishDate": "2020/10/1",
+      "status": "可供借閱",
+      "url": "https://cf-assets2.tenlong.com.tw/products/images/000/154/285/webp/MP22030.webp?1604386005",
+      "createDate": "2020/12/28"
+    },
+    {
+      "bookSeq": "202000016",
+      "bookName": "和艦長一起30天-玩轉GitLab",
+      "author": "陳正瑋著",
+      "tech": "Git",
+      "publisher": "博碩文化",
+      "publishDate": "2020/11/1",
+      "status": "可供借閱",
+      "url": "https://cf-assets2.tenlong.com.tw/products/images/000/153/887/webp/9789864345311.webp?1603433542",
+      "createDate": "2020/12/28"
+    },
+    {
+      "bookSeq": "202000017",
+      "bookName": "ASP .NET MVC 5.x網站開發-Web應用的經典實務範例解析(Visual C#)",
+      "author": "姜琇森等6人編著",
+      "tech": "ASP.NET",
+      "publisher": "深智",
+      "publishDate": "2019/12/1",
+      "status": "可供借閱",
+      "url": "https://cdn.kingstone.com.tw/book/images/product/20131/2013120525405/2013120525405b.jpg",
+      "createDate": "2020/12/28"
     }
+
   ],
   "reservations": [
     {

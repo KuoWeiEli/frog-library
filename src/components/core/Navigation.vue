@@ -50,7 +50,7 @@
 
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn block to="/">
+          <v-btn block to="/login">
             登入
           </v-btn>
         </div>

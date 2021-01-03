@@ -8,13 +8,14 @@ import UserManagement from "@/components/manage/UserManagement";
 import BookManagement from "@/components/manage/BookManagement";
 import MyReservation from "@/components/record/MyReservation";
 import ReservationManagement from "@/components/manage/ReservationManagement";
+import Home from "@/views/Home";
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        {path: '/', component: login},
+        {path: '/', component: Home},
         {path: '/login', component: login},
         {path: '/library-info', component: LibraryInfo},
         {path: '/user-management', component: UserManagement},

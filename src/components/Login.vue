@@ -1,23 +1,32 @@
 <template>
-  <el-row class="login" type="flex" justify="center" align="middle">
-    <el-col :md="8">
-      <div class="logo">
-        <img src="../assets/frog_jump_circle.png" :height="logo.height" :width="logo.width" alt="德義公司LOGO"/>
-        <h1>德義資訊圖書管理系統</h1>
-      </div>
-      <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
-        <el-form-item prop="email">
-          <el-input v-model="form.email" placeholder="email..."></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password" v-model="form.password" placeholder="password..." autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="loginBtn" type="primary" @click="submit('loginForm')">Login</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-  </el-row>
+  <v-container>
+    <v-row class="text-center">
+      <v-col cols="12">
+        <v-img
+            :src="require('../assets/frog_jump_circle.png')"
+            class="my-3"
+            contain
+            height="200"
+        />
+      </v-col>
+      <v-col
+          class="mb-5"
+          cols="12"
+      >
+          <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
+            <el-form-item prop="email">
+              <el-input v-model="form.email" placeholder="email..."></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input type="password" v-model="form.password" placeholder="password..." autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="loginBtn" type="primary" @click="submit('loginForm')">Login</el-button>
+            </el-form-item>
+          </el-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
