@@ -1,36 +1,28 @@
 <template>
-  <div id="app">
-    <el-container>
-      <el-header>
-        <myHeader></myHeader>
-      </el-header>
-      <el-main>
-        <el-row>
-          <router-view></router-view>
-        </el-row>
-      </el-main>
-    </el-container>
-  </div>
+  <v-app>
+    <navigation :drawer="drawer"/>
+    <app-bar :drawer="drawer"/>
+
+    <v-main>
+      <v-container>
+        <router-view/>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import myHeader from "@/components/Header";
+
+import Navigation from "@/components/core/Navigation";
+import AppBar from "@/components/core/AppBar";
 
 export default {
   name: 'App',
-  components: { myHeader }
-}
+  components: {AppBar, Navigation},
+  data: () => ({
+    drawer: {
+      isOpen: true
+    }
+  }),
+};
 </script>
-
-<style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
-  color: #2c3e50;
-  /*margin-top: 60px;*/
-  min-width: 300px;
-}
-
-</style>

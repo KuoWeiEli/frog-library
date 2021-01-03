@@ -4,10 +4,10 @@ import VueRouter from 'vue-router'
 // component
 import login from '@/components/Login'
 import LibraryInfo from "@/components/LibraryInfo";
-import UserManagement from "@/components/user/UserManagement";
-import BookManagement from "@/components/book/BookManagement";
+import UserManagement from "@/components/manage/UserManagement";
+import BookManagement from "@/components/manage/BookManagement";
 import MyReservation from "@/components/record/MyReservation";
-import ReservationManagement from "@/components/reservation/ReservationManagement";
+import ReservationManagement from "@/components/manage/ReservationManagement";
 
 Vue.use(VueRouter)
 
