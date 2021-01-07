@@ -183,7 +183,7 @@
 import bookService from '@/services/book'
 
 export default {
-  name: 'LibraryInfo',
+  name: 'BookManagement',
   data: () => ({
     dialog: false,
     headers: [
