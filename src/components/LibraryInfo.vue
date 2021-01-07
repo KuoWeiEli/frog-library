@@ -21,17 +21,17 @@
               v-model="dialog"
               max-width="500px"
           >
-<!--            <template v-slot:activator="{ on, attrs }">-->
-<!--              <v-btn-->
-<!--                  color="primary"-->
-<!--                  dark-->
-<!--                  class="mb-2"-->
-<!--                  v-bind="attrs"-->
-<!--                  v-on="on"-->
-<!--              >-->
-<!--                New Reservation-->
-<!--              </v-btn>-->
-<!--            </template>-->
+            <!--            <template v-slot:activator="{ on, attrs }">-->
+            <!--              <v-btn-->
+            <!--                  color="primary"-->
+            <!--                  dark-->
+            <!--                  class="mb-2"-->
+            <!--                  v-bind="attrs"-->
+            <!--                  v-on="on"-->
+            <!--              >-->
+            <!--                New Reservation-->
+            <!--              </v-btn>-->
+            <!--            </template>-->
             <v-card>
               <v-card-title>
                 <span class="headline">Reservation</span>
@@ -140,7 +140,8 @@
         >
           <v-icon small>
             mdi-calendar-month
-          </v-icon>預約
+          </v-icon>
+          預約
         </v-btn>
       </template>
     </v-data-table>
@@ -150,7 +151,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import libraryService from '@/services/libraryService'
 
 export default {
   name: 'LibraryInfo',
@@ -161,7 +162,7 @@ export default {
       {text: '書刊名', value: 'bookName'},
       {text: '作者', value: 'author'},
       {text: '技術', value: 'tech'},
-      {text: '狀態', value: 'bookStatus'},
+      {text: '狀態', value: 'statusDisplay'},
       {text: '預約人數', value: 'waitNum'},
     ],
     items: [],
@@ -176,7 +177,7 @@ export default {
   }),
 
   computed: {
-    computedDateFormatted () {
+    computedDateFormatted() {
       return this.formatDate(this.date)
     },
   },
@@ -203,17 +204,16 @@ export default {
     },
 
     async initialize() {
-      axios.get('http://localhost:3000/libraryInfo')
-          .then(response => {
-            this.items = response.data
-          })
+      libraryService.getAll()
+          .then(data => this.items = data)
+
       this.defaultItem = this.initItem()
       this.editedItem = this.initItem()
 
       // dialog minDate
       let tempDate = new Date()
       tempDate.setDate(tempDate.getDate() + 4)
-      this.minDate = tempDate.toISOString().substr(0,10)
+      this.minDate = tempDate.toISOString().substr(0, 10)
       this.date = this.minDate
     },
 
@@ -249,7 +249,7 @@ export default {
     },
 
 
-    formatDate (date) {
+    formatDate(date) {
       if (!date) return null
 
       const [year, month, day] = date.split('-')

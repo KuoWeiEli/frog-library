@@ -74,8 +74,10 @@
                         md="4"
                     >
                       <v-select
-                          :items="userStatus"
                           v-model="editedItem.status"
+                          :items="userStatusSelect"
+                          item-text="label"
+                          item-value="value"
                           label="員工狀態"
                       ></v-select>
                     </v-col>
@@ -116,7 +118,8 @@
         >
           <v-icon small>
             mdi-lead-pencil
-          </v-icon>編輯
+          </v-icon>
+          編輯
         </v-btn>
       </template>
     </v-data-table>
@@ -126,10 +129,10 @@
 </template>
 
 <script>
-import axios from "axios";
+import userService from '@/services/user'
 
 export default {
-  name: 'LibraryInfo',
+  name: 'UserManagement',
   data: () => ({
     dialog: false,
     headers: [
@@ -137,7 +140,7 @@ export default {
       {text: '電子信箱', value: 'email'},
       {text: '員工編號', value: 'empId'},
       {text: '員工姓名', value: 'empName'},
-      {text: '狀態', value: 'status'},
+      {text: '狀態', value: 'statusDisplay'},
     ],
     items: [],
     editedIndex: -1,
@@ -147,13 +150,17 @@ export default {
     date: null,
     maxDate: null,
     menu1: false,
-    userStatus: ['在職', '留職停薪', '離職']
+    userStatus: userService.userStatus,
+    userStatusSelect: Object.entries(userService.userStatus)
+        .map(([key, val]) => {
+          return {label: val, value: key}
+        })
 
   }),
 
   computed: {
     headline() {
-      return this.editedIndex === -1? 'Add User': 'Edit User'
+      return this.editedIndex === -1 ? 'Add User' : 'Edit User'
     }
   },
 
@@ -178,10 +185,12 @@ export default {
     },
 
     async initialize() {
-      axios.get('http://localhost:3000/users')
-          .then(response => {
-            this.items = response.data
+      userService.getAll()
+          .then(data => {
+            this.items = data
+            this.items.forEach(item => item.statusDisplay = this.userStatus[item.status])
           })
+
       this.defaultItem = this.initItem()
       this.editedItem = this.initItem()
     },

@@ -126,8 +126,10 @@
                         md="4"
                     >
                       <v-select
-                          :items="bookStatus"
                           v-model="editedItem.status"
+                          :items="bookStatusSelect"
+                          item-text="label"
+                          item-value="value"
                           label="書籍狀態"
                       ></v-select>
                     </v-col>
@@ -157,7 +159,6 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-
         <v-btn
             x-small
             text
@@ -168,7 +169,8 @@
         >
           <v-icon small>
             mdi-lead-pencil
-          </v-icon>編輯
+          </v-icon>
+          編輯
         </v-btn>
       </template>
     </v-data-table>
@@ -178,7 +180,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import bookService from '@/services/book'
 
 export default {
   name: 'LibraryInfo',
@@ -192,7 +194,7 @@ export default {
       {text: '技術', value: 'tech'},
       {text: '出版社', value: 'publisher'},
       {text: '出版年', value: 'publishDate'},
-      {text: '書籍狀態', value: 'status'},
+      {text: '書籍狀態', value: 'statusDisplay'},
     ],
     items: [],
     editedIndex: -1,
@@ -202,16 +204,19 @@ export default {
     date: null,
     maxDate: null,
     menu1: false,
-    bookStatus: ['遺失', '破損', '可供借閱']
-
+    bookStatus: bookService.bookStatus,
+    bookStatusSelect: Object.entries(bookService.bookStatus)
+        .map(([key, val]) => {
+          return {label: val, value: key}
+        })
   }),
 
   computed: {
     headline() {
-      return this.editedIndex === -1? 'Add Book': 'Edit Book'
+      return this.editedIndex === -1 ? 'Add Book' : 'Edit Book'
     },
 
-    computedDateFormatted () {
+    computedDateFormatted() {
       return this.formatDate(this.date)
     },
   },
@@ -239,17 +244,21 @@ export default {
       }
     },
 
-    async initialize() {
-      axios.get('http://localhost:3000/books')
-          .then(response => {
-            this.items = response.data
+    initialize() {
+      bookService.getAll()
+          .then(data => {
+            this.items = data
+            this.items.forEach(
+                item => item.statusDisplay = this.bookStatus[item.status]
+            )
           })
+
       this.defaultItem = this.initItem()
       this.editedItem = this.initItem()
 
       // dialog minDate
       let tempDate = new Date()
-      this.maxDate = tempDate.toISOString().substr(0,10)
+      this.maxDate = tempDate.toISOString().substr(0, 10)
       this.date = this.maxDate
     },
 
@@ -281,7 +290,7 @@ export default {
       })
     },
 
-    formatDate (date) {
+    formatDate(date) {
       if (!date) return null
 
       const [year, month, day] = date.split('-')

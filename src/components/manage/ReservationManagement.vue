@@ -286,9 +286,9 @@
             @click="editItem(item)"
         >
           <v-icon small>
-            {{ item.editable? 'mdi-lead-pencil': 'mdi-magnify' }}
+            {{ item.editable ? 'mdi-lead-pencil' : 'mdi-magnify' }}
           </v-icon>
-          {{ item.editable? '編輯': '查看' }}
+          {{ item.editable ? '編輯' : '查看' }}
         </v-btn>
       </template>
     </v-data-table>
@@ -298,7 +298,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import reservationService from '@/services/reservations'
 
 export default {
   name: 'ReservationManagement',
@@ -317,6 +317,7 @@ export default {
       {text: '歸還時間', value: 'returnDate'},
     ],
     items: [],
+    reservationStatusMap: reservationService.reservationStatus,
     editedIndex: -1,
     editedItem: {},
     defaultItem: {},
@@ -392,29 +393,18 @@ export default {
     },
 
     getItems: function () {
-      const statusMap = {
-        E: '已歸還',
-        D: '已拒絕',
-        T: '已逾時',
-        C: '已取消',
-        2: '待審核',
-        3: '待取書',
-        4: '待歸還'
-      }
-      return new Promise(resolve => {
-        axios.get('http://localhost:3000/reservations')
-            .then(response => {
-              this.items = response.data
-              // display func
+      reservationService.getAll()
+          .then(data => {
+            this.items = data
+            // display func
 
-              this.items.forEach(e => {
-                e.statusTW = statusMap[e.status]
-                e.applicant = e.empId + '-' + e.empName
-                e.editable = /[234]/.test(e.status)
-              })
-              resolve()
+            this.items.forEach(e => {
+              e.statusTW = this.reservationStatusMap[e.status]
+              e.applicant = e.empId + '-' + e.empName
+              e.editable = /[234]/.test(e.status)
             })
-      })
+
+          })
     },
 
     async initialize() {
@@ -430,7 +420,7 @@ export default {
       this.dialog = true
 
       //test
-      this.editedItem.applicant = '0400-黃國維'
+      this.editedItem.applicant = `${this.editedItem.empId + '-' + this.editedItem.empName}`
       this.editedItem.applyDate = this.formatDate(this.editedItem.applyDate, '/', '-')
       this.editedItem.reservationDate = this.formatDate(this.editedItem.reservationDate, '/', '-')
       this.editedItem.dueDate = this.formatDate(this.editedItem.dueDate, '/', '-')
@@ -462,7 +452,7 @@ export default {
     },
 
 
-    formatDate(date, fromSeparator= '-', toSeparator= '/') {
+    formatDate(date, fromSeparator = '-', toSeparator = '/') {
       if (!date) return null
 
       const [year, month, day] = date.split(fromSeparator)

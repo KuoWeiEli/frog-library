@@ -5,8 +5,8 @@
         :key="reservation.seq"
     >
       <div slot="header">
-        <span>{{'#' + (myReservations.length - index) + '  ' + reservation.bookName}}{{'（測試說明:' +  reservation.testName + '）'}}</span>
-<!--        <el-button style="float: right; padding: 3px 0" type="text">取消</el-button>-->
+        <span>{{ '#' + (myReservations.length - index) + '  ' + reservation.bookName }}{{ '（測試說明:' + reservation.testName + '）' }}</span>
+        <!--        <el-button style="float: right; padding: 3px 0" type="text">取消</el-button>-->
       </div>
 
       <el-steps :active="reservation.activeStep" align-center>
@@ -17,7 +17,7 @@
               :title="step.title"
               :status="step.status">
             <template v-slot:description>
-              {{step.desc}}<br v-if="step.desc"/>{{step.statusDesc}}
+              {{ step.desc }}<br v-if="step.desc"/>{{ step.statusDesc }}
             </template>
           </el-step>
         </template>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import reservationService from '@/services/reservations'
 
 export default {
   name: "MyReservation",
@@ -50,11 +50,9 @@ export default {
     },
     getMyReservations() {
       return new Promise(resolve => {
-        console.log('getMyReservations.....')
-        axios.get('http://localhost:3000/reservations')
-            .then(response => {
-              console.log(`finish ajax`)
-              this.myReservations = response.data
+        reservationService.getByUserId('0400')
+            .then(data => {
+              this.myReservations = data
               resolve()
             })
       })
@@ -64,7 +62,7 @@ export default {
         title: title,
         desc: desc,
         status: status,
-        statusDesc: (statusDesc? `狀態：${statusDesc}`: '')
+        statusDesc: (statusDesc ? `狀態：${statusDesc}` : '')
       }
     },
     configureStep() {
@@ -101,7 +99,7 @@ export default {
       let statusDesc;
 
       if (each.verifyDate) {
-        if (isDeny){
+        if (isDeny) {
           status = 'error'
           statusDesc = '審核失敗'
         } else {
@@ -119,7 +117,7 @@ export default {
         }
       }
 
-      return this.createStep('審核', each.verifyDate? `審核時間：${each.verifyDate}`: '', status, statusDesc);
+      return this.createStep('審核', each.verifyDate ? `審核時間：${each.verifyDate}` : '', status, statusDesc);
     },
     createStep3(each) {
       const isCanceled = each.status === 'C'
@@ -140,13 +138,13 @@ export default {
           }
         }
       }
-      return this.createStep('取書', each.takeDate? `取書時間：${each.takeDate}`: '', status, statusDesc)
+      return this.createStep('取書', each.takeDate ? `取書時間：${each.takeDate}` : '', status, statusDesc)
     },
     createStep4(each) {
       const isTimeout = each.status === 'T'
-      return this.createStep('歸還', each.activeStep > 2? (each.returnDate? `歸還時間：${each.returnDate}`: `到期時間：${each.dueDate}`): '',
-          each.returnDate ? 'success' : (isTimeout? 'error': ''),
-          each.returnDate ? '已歸還' : (isTimeout? '已逾期': ''));
+      return this.createStep('歸還', each.activeStep > 2 ? (each.returnDate ? `歸還時間：${each.returnDate}` : `到期時間：${each.dueDate}`) : '',
+          each.returnDate ? 'success' : (isTimeout ? 'error' : ''),
+          each.returnDate ? '已歸還' : (isTimeout ? '已逾期' : ''));
     }
   }
 }
