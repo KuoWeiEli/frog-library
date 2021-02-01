@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import userService from '@/services/user'
+import userService from '@/services/firebase/user'
 
 export default {
   name: 'UserManagement',

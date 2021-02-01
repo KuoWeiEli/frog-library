@@ -3,7 +3,8 @@
     <v-data-table
         :headers="headers"
         :items="items"
-        sort-by="tech"
+        sort-by="createDate"
+        :sort-desc="true"
         class="elevation-1"
     >
       <template v-slot:top>
@@ -17,145 +18,22 @@
               vertical
           ></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog
-              v-model="dialog"
-              max-width="500px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-              >
-                New Book
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ headline }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                    >
-                      <v-text-field
-                          v-model="editedItem.bookName"
-                          label="書刊名"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          v-model="editedItem.bookSeq"
-                          label="序號"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          v-model="editedItem.author"
-                          label="作者"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          v-model="editedItem.tech"
-                          label="技術"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          v-model="editedItem.publisher"
-                          label="出版社"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        lg="6"
-                    >
-                      <v-menu
-                          ref="menu1"
-                          v-model="menu1"
-                          :close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          max-width="290px"
-                          min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                              v-model="computedDateFormatted"
-                              label="出版年"
-                              v-bind="attrs"
-                              v-on="on"
-                              readonly
-                              hint="出版時間不得小於今日!"
-                              persistent-hint
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="date"
-                            no-title
-                            :max="maxDate"
-                            @input="menu1 = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-select
-                          v-model="editedItem.status"
-                          :items="bookStatusSelect"
-                          item-text="label"
-                          item-value="value"
-                          label="書籍狀態"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
+          <basic-dialog :dialog="dialog">
+            <basic-card :title="dialogTitle" :loading="isCardLoading" :disabled="isCardDisabled" @save="save"
+                        @close="close">
+              <book-form ref="form" :edited-item="editedItem" @coverUpload="coverUpload"/>
+              <template v-slot:prepend>
+                <v-avatar
+                    v-if="cover"
+                    class="ma-3"
+                    size="400"
+                    tile
                 >
-                  Cancel
-                </v-btn>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+                  <v-img contain :src="cover" @load="coverLoaded"></v-img>
+                </v-avatar>
+              </template>
+            </basic-card>
+          </basic-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -172,131 +50,176 @@
           </v-icon>
           編輯
         </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+            x-small
+            text
+            icon
+            class="mr-2"
+            color="error"
+            @click="removeItem(item)"
+        >
+          <v-icon small>
+            mdi-trash-can-outline
+          </v-icon>
+          刪除
+        </v-btn>
       </template>
     </v-data-table>
   </div>
-
-
 </template>
 
 <script>
-import bookService from '@/services/book'
+import {Book, bookStatus} from '@/model/book'
+import bookService from '@/services/aws/book'
+import BasicDialog from '@/components/core/BasicDialog'
+import BookForm from '@/components/book/BookForm'
+import BasicCard from '@/components/core/BasicCard'
 
 export default {
   name: 'BookManagement',
+  components: {BasicDialog, BookForm, BasicCard},
   data: () => ({
-    dialog: false,
     headers: [
       {text: '操作', value: 'actions', sortable: false},
-      {text: '書刊名', value: 'bookName'},
-      {text: '序號', value: 'bookSeq'},
+      {text: '書刊名', value: 'name'},
       {text: '作者', value: 'author'},
       {text: '技術', value: 'tech'},
       {text: '出版社', value: 'publisher'},
       {text: '出版年', value: 'publishDate'},
+      {text: '入庫時間', value: 'createDate'},
       {text: '書籍狀態', value: 'statusDisplay'},
     ],
+    bookStatus: bookStatus,
     items: [],
     editedIndex: -1,
-    editedItem: {},
-    defaultItem: {},
-    // dialog
-    date: null,
-    maxDate: null,
-    menu1: false,
-    bookStatus: bookService.bookStatus,
-    bookStatusSelect: Object.entries(bookService.bookStatus)
-        .map(([key, val]) => {
-          return {label: val, value: key}
-        })
+    editedItem: new Book(),
+    dialog: {
+      visible: false,
+      maxWidth: '1000px',
+      activator: 'New Book'
+    },
+    cover: null,
+    // card prop
+    isCardLoading: false,
+    isCardDisabled: false
   }),
 
   computed: {
-    headline() {
+    dialogTitle() {
       return this.editedIndex === -1 ? 'Add Book' : 'Edit Book'
-    },
-
-    computedDateFormatted() {
-      return this.formatDate(this.date)
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close()
     }
   },
 
   created() {
     this.initialize()
+    this.subscribe()
   },
 
   methods: {
-    initItem() {
-      return {
-        bookSeq: '',
-        bookName: '',
-        author: '',
-        tech: '',
-        publisher: '',
-        publishDate: '',
-        status: ''
-      }
-    },
-
     initialize() {
       bookService.getAll()
           .then(data => {
             this.items = data
             this.items.forEach(
-                item => item.statusDisplay = this.bookStatus[item.status]
+                item => {
+                  item.statusDisplay = this.bookStatus[item.status]
+                }
             )
           })
-
-      this.defaultItem = this.initItem()
-      this.editedItem = this.initItem()
-
-      // dialog minDate
-      let tempDate = new Date()
-      this.maxDate = tempDate.toISOString().substr(0, 10)
-      this.date = this.maxDate
+          .catch(err => {
+            this.$message({type: 'error', message: `error happened:  ${err}`})
+          })
     },
 
     editItem(item) {
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
-      this.dialog = true
+
+      // 作為 cover 是否有變動的 flag
+      this.editedItem.coverChanged = false
+      this.isCardLoading = true
+      // book cover in s3 use the bookID as the file key
+      bookService.getBookCover(this.editedItem.id)
+          .then(url => {
+            this.cover = url
+          })
+          .catch(err => {
+            this.$message({type: 'error', message: `load book's cover happened error:  ${err}`})
+          })
+      this.dialog.visible = true
     },
 
     close() {
-      this.dialog = false
+      this.dialog.visible = false
+      this.$refs.form.$refs.bookForm.resetValidation()
+
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedItem = new Book()
         this.editedIndex = -1
+        this.cover = null
+        this.isCardLoading = false
+        this.isCardDisabled = false
       })
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem)
-      } else {
-        this.items.push(this.editedItem)
-      }
-      this.close()
+      if (!this.$refs.form.$refs.bookForm.validate()) return
 
-      this.$message({
-        type: 'success',
-        message: '修改成功!'
-      })
+      const isAdding = this.editedIndex === -1
+      const msg = isAdding ? 'adding' : 'updating'
+      const method = isAdding ? 'createBook' : 'updateBook'
+
+      this.isCardLoading = true
+      this.isCardDisabled = true
+
+      bookService[method](Object.assign({}, this.editedItem))
+          .then(() => {
+            this.$message({
+              type: 'success', message: `Success ${msg} book!`
+            })
+
+            this.close()
+          })
+          .catch(error => {
+            this.isCardLoading = false
+            this.isCardDisabled = false
+
+            this.$message({type: 'error', message: `Error ${msg} book: + ${error}`})
+          })
     },
-
-    formatDate(date) {
-      if (!date) return null
-
-      const [year, month, day] = date.split('-')
-      return `${month}/${day}/${year}`
+    // cover upload 事件
+    coverUpload(event) {
+      this.isCardLoading = true
+      this.cover = event
+    },
+    coverLoaded() {
+      this.isCardLoading = false
+    },
+    subscribe() {
+      bookService.subscribe(
+          book => this.items.push(book),
+          book => {
+            let index = this.items.findIndex(item => item.id === book.id)
+            Object.assign(this.items[index], book)
+          },
+          book => {
+            let index = this.items.findIndex(item => item.id === book.id)
+            this.items.splice(index, 1)
+          })
+    },
+    removeItem(item) {
+      this.$confirm(`Do you want to remove the book,【${item.name}】?`)
+          .then(() => {
+            bookService.deleteBook(item.id)
+                .then(() => this.$message({
+                  type: 'success', message: `Successfully delete book, 【${item.name}】`
+                }))
+                .catch(err => this.$message({
+                  type: 'error', message: `delete book【${item.name} failed, error: ${err}】`
+                }))
+          })
     }
   }
 }
 </script>
-

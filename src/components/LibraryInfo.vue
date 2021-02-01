@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import libraryService from '@/services/libraryService'
+import libraryService from '@/services/firebase/libraryService'
 
 export default {
   name: 'LibraryInfo',

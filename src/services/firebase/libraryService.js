@@ -1,5 +1,5 @@
-import bookService from '@/services/book'
-import reservationService from '@/services/reservations'
+import bookService from '@/services/firebase/book'
+import reservationService from '@/services/firebase/reservations'
 
 const libraryService = {
     bookCurrStatus: {

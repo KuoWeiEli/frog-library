@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import reservationService from '@/services/reservations'
+import reservationService from '@/services/firebase/reservations'
 
 export default {
   name: "MyReservation",
