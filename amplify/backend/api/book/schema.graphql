@@ -1,0 +1,10 @@
+type Book @model {
+  id: ID!
+  name: String!
+  author: String!
+  tech: String!
+  publisher: String!
+  publishDate: String!
+  status: String!
+  createDate: String!
+}

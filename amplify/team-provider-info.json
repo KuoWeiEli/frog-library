@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frogsecretary-dev-144634-authRole",
+      "UnauthRoleArn": "arn:aws:iam::446631344291:role/amplify-frogsecretary-dev-144634-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::446631344291:role/amplify-frogsecretary-dev-144634-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-frogsecretary-dev-144634-deployment",
+      "UnauthRoleName": "amplify-frogsecretary-dev-144634-unauthRole",
+      "StackName": "amplify-frogsecretary-dev-144634",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:446631344291:stack/amplify-frogsecretary-dev-144634/6852b4f0-606b-11eb-b590-0ab74521b02e",
+      "AmplifyAppId": "d1rcmlqub5ttel"
+    },
+    "categories": {
+      "auth": {
+        "frogsecretary5eadaaeb": {}
+      }
+    }
+  }
+}
