@@ -1,63 +1,70 @@
 <template>
   <div>
-    <h1 class="display-1 font-weight-bold mb-3 text-center">
-      新書入庫
-    </h1>
-    <v-carousel
-        cycle
-        height="450"
-        hide-delimiter-background
-        show-arrows-on-hover
+    <v-row
+        class="fill-height"
+        align="center"
+        justify="center"
     >
-      <v-carousel-item
-          v-for="(item, i) in items"
-          :key="i"
+      <v-col
+          cols="12"
+          lg="8"
       >
-        <v-sheet
-            color="white"
-            height="100%"
+        <h1 class="display-1 font-weight-bold mb-3 text-center">
+          新書入庫
+        </h1>
+        <v-carousel
+            cycle
+            light
+            height="420"
+            hide-delimiter-background
+            show-arrows-on-hover
         >
-          <v-row
-              class="fill-height"
-              align="center"
-              justify="center"
+          <v-carousel-item
+              v-for="(item, i) in items"
+              :key="i"
           >
-            <v-col
-                cols="12"
-                lg="4"
-            >
-              <v-img
-                  :src="item.url"
-                  class="my-3"
-                  contain
-                  height="400"
-              />
-            </v-col>
-            <v-col
-                cols="12"
-                lg="4"
-            >
-              <h2 class="headline font-weight-bold mb-3 black--text">
-                {{ item.bookName }}
-              </h2>
-              <p class="black--text">
-                <span class="font-weight-bold">作者：</span> {{ item.author }}
-                <br>
-                <span class="font-weight-bold">技術：</span> {{ item.tech }}
-                <br>
-                <span class="font-weight-bold">出版社：</span> {{ item.publisher }}
-                <br>
-                <span class="font-weight-bold">出版年：</span> {{ item.publishDate }}
-              </p>
-            </v-col>
-          </v-row>
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
+            <v-card>
+              <div class="d-flex flex-no-wrap justify-start">
+                <v-avatar
+                    class="ma-3"
+                    size="400"
+                    tile
+                >
+                  <v-img contain :src="item.coverUrl"></v-img>
+                </v-avatar>
+
+                <div>
+                  <v-card-title>
+                    <span class="headline">{{ item.name }}</span>
+                  </v-card-title>
+
+                  <v-card-subtitle>
+                    <v-list>
+                      <v-list-item
+                          v-for="intro in item.introduce"
+                          :key="intro.value"
+                      >
+                        <v-list-item-icon>
+                          <v-icon>{{ intro.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>{{ intro.label }}</v-list-item-title>
+                        <v-list-item-subtitle class="text-right">
+                          {{ intro.value }}
+                        </v-list-item-subtitle>
+                      </v-list-item>
+                    </v-list>
+                  </v-card-subtitle>
+                </div>
+              </div>
+            </v-card>
+          </v-carousel-item>
+        </v-carousel>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
-import axios from "axios";
+import bookService from '@/services/aws/book'
 
 export default {
   name: 'BookCarousels',
@@ -66,15 +73,27 @@ export default {
   },
   data() {
     return {
-      items: [],
+      items: []
     }
   },
   methods: {
-    async initialize() {
-      axios.get('http://localhost:3000/books?createDate=2020/12/28')
-          .then(response => {
-            this.items = response.data
+    initialize() {
+      bookService.getBooksForCarousels()
+          .then(data => {
+            this.items = data
+            this.getIntro(this.items)
           })
+          .catch(err => this.$message({type: 'error', message: `loading book happened error: + ${err}`}))
+    },
+    getIntro(items) {
+      items.forEach(item => {
+        item.introduce = [
+          {label: '作者', icon: 'mdi-human-edit', value: item.author},
+          {label: '出版社', icon: 'mdi-home-city-outline', value: item.publisher},
+          {label: '出版日', icon: 'mdi-calendar', value: item.publishDate},
+          {label: '技術', icon: 'mdi-electron-framework', value: item.tech},
+        ]
+      })
     }
   }
 }

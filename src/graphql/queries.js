@@ -40,3 +40,36 @@ export const listBooks = /* GraphQL */ `
     }
   }
 `;
+export const bookByStatus = /* GraphQL */ `
+  query BookByStatus(
+    $status: String
+    $createDate: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelBookFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    bookByStatus(
+      status: $status
+      createDate: $createDate
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

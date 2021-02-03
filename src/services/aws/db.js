@@ -14,10 +14,11 @@ const mutations = function (model, action) {
     })
 }
 
-const queries = function (action) {
+const queries = function (action, variables) {
     return new Promise((resolve, reject) => {
         API.graphql({
-            query: queryQL[action]
+            query: queryQL[action],
+            variables: variables
         }).then(result => {
             resolve(result.data[action])
         }).catch(err => reject(err))

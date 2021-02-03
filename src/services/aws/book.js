@@ -77,6 +77,45 @@ const bookService = {
         })
     },
 
+    // 首頁展示新書入庫為選擇最新入庫時間的書
+    getBooksForCarousels() {
+        return new Promise((resolve, reject) => {
+            // Step1 先取得最新一筆的入庫時間
+            db.queries("bookByStatus",
+                {
+                    status: 'N', // 新書入庫狀態皆假設為可正常供閱
+                    limit: 1,
+                    sortDirection: 'DESC'
+                })
+                .then(firstBookData => {
+                    // Step2 利用其時間查詢相同一批入庫的書籍
+                    let filter = {
+                        createDate: {
+                            eq: firstBookData.items[0].createDate
+                        }
+                    }
+
+                    db.queries("listBooks", {filter})
+                        .then(data => {
+                            // Step3 取得這批書籍的封面檔案
+                            Promise.all(data
+                                .items
+                                .map(e => e.id)
+                                .map(this.getBookCover))
+                                .then(urls => {
+                                    data.items
+                                        .forEach((item, index)=> {
+                                            item.coverUrl = urls[index]
+                                        })
+                                    resolve(data.items)
+                                })
+                        })
+                        .catch(err => reject(err))
+                })
+                .catch(err => reject(err))
+        })
+    },
+
     getBookCover(bookID) {
         return new Promise((resolve, reject) => {
             Storage.get(bookCoverRef + bookID)

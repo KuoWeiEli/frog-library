@@ -1,4 +1,7 @@
-type Book @model {
+type Book
+  @model
+  @key(name: "byStatus", fields: ["status", "createDate"], queryField: "bookByStatus")
+{
   id: ID!
   name: String!
   author: String!
