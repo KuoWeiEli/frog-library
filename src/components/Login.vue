@@ -1,112 +1,56 @@
 <template>
   <v-container>
-    <v-row class="text-center">
-      <v-col cols="12">
-        <v-img
-            :src="require('../assets/frog_jump_circle.png')"
-            class="my-3"
-            contain
-            height="200"
-        />
-      </v-col>
-      <v-col
-          class="mb-5"
-          cols="12"
-      >
-          <el-form ref="loginForm" :model="form" :rules="rules" status-icon>
-            <el-form-item prop="email">
-              <el-input v-model="form.email" placeholder="email..."></el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input type="password" v-model="form.password" placeholder="password..." autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button class="loginBtn" type="primary" @click="submit('loginForm')">Login</el-button>
-            </el-form-item>
-          </el-form>
-      </v-col>
-    </v-row>
+    <div class="login">
+      <login-form
+          v-if="step===0"
+          @forgot-password="step = 1"
+      ></login-form>
+      <forgot-password-form
+          v-if="step===1"
+          @back-login="step = 0"
+          @after-send-code="afterSendCode"
+      ></forgot-password-form>
+      <forgot-password-submit-form
+          v-if="step===2"
+          :email="emailForForgotPassword"
+          @back-login="step = 0"
+          @success="step = 0"
+      ></forgot-password-submit-form>
+    </div>
   </v-container>
 </template>
 
 <script>
-import device from "@/services/device";
+
+import LoginForm from '@/components/form/LoginForm'
+import ForgotPasswordForm from '@/components/form/ForgotPasswordForm'
+import ForgotPasswordSubmitForm from '@/components/form/ForgotPasswordSubmitForm'
 
 export default {
-  name: 'login',
-  created() {
-    if (device.isMobile()) {
-      this.logo = {
-        height: 100,
-        width: 100
-      }
-    }
-  },
-  data() {
-    // let checkEmail = (rule, value, callback) => {
-    //   let emailReg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
-    //   setTimeout(() => {
-    //     if (emailReg.test(value))
-    //       callback()
-    //     else
-    //       callback(new Error('請輸入正確的 Email 格式！'));
-    //   }, 200);
-    // };
-
-    return {
-      logo: {
-        height: 296,
-        width: 296,
-      },
-      form: {
-        email: '',
-        password: ''
-      },
-      rules: {
-        email: [
-          {required: true, message: 'Please input your email', trigger: 'blur'},
-          {
-            pattern: /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
-            message: '請輸入正確的 Email 格式！', trigger: 'blur'
-          }
-        ],
-        password: [
-          {required: true, message: 'Please input your password', trigger: 'blur'}
-        ]
-      }
-    }
-  },
+  name: 'Login',
+  components: {ForgotPasswordSubmitForm, LoginForm, ForgotPasswordForm},
+  data: () => ({
+    /**
+     *  控制顯示變數
+     *  0: 登入
+     *  1: 重設密碼 Step1（發送驗證碼）
+     *  2: 重設密碼 Step2（設定新密碼）
+     **/
+    step: 0,
+    emailForForgotPassword: ''
+  }),
   methods: {
-    submit(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$message({
-            type: 'success',
-            message: '登入成功!'
-          })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: '資料不正確，請確認!'
-          })
-        }
-      })
+    afterSendCode(event) {
+      this.emailForForgotPassword = event
+      this.step = 2
     }
   }
 }
 </script>
 
 <style scoped>
-
-.loginBtn {
-  width: 100%;
-}
-
-.logo {
-  text-align: center;
-}
-
 .login {
-  height: 87vh;  /* set the height of el-row, let the align attribute can work */
+  padding: 20px;
+  max-width: 500px;
 }
 </style>

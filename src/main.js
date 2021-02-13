@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from '@/plugins/vuexConfig'
 
 // element ui
 import ElementUI from 'element-ui'
@@ -19,5 +20,6 @@ new Vue({
   render: h => h(App),
   vuetify,
   firebaseSDK,
-  router
+  router,
+  store
 }).$mount('#app')

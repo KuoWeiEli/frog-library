@@ -130,6 +130,7 @@
 
 <script>
 import userService from '@/services/firebase/user'
+import { userStatus } from '@/model/user'
 
 export default {
   name: 'UserManagement',
@@ -150,8 +151,8 @@ export default {
     date: null,
     maxDate: null,
     menu1: false,
-    userStatus: userService.userStatus,
-    userStatusSelect: Object.entries(userService.userStatus)
+    userStatus: userStatus,
+    userStatusSelect: Object.entries(userStatus)
         .map(([key, val]) => {
           return {label: val, value: key}
         })

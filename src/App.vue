@@ -13,15 +13,16 @@
 
 <script>
 
-import Navigation from "@/components/core/Navigation";
-import AppBar from "@/components/core/AppBar";
+import Navigation from '@/components/core/Navigation'
+import AppBar from '@/components/core/AppBar'
+import Device from '@/services/device'
 
 export default {
   name: 'App',
   components: {AppBar, Navigation},
   data: () => ({
     drawer: {
-      isOpen: true
+      isOpen: !Device.isMobile()
     }
   }),
 };

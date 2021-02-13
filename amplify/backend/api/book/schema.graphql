@@ -11,3 +11,13 @@ type Book
   status: String!
   createDate: String!
 }
+
+type User @model
+{
+  id: ID!
+  email: String!
+  empid: String!
+  nameTW: String!
+  nameEN: String!
+  status: String!
+}

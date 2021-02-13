@@ -49,3 +49,45 @@ export const onDeleteBook = /* GraphQL */ `
     }
   }
 `;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      email
+      empid
+      nameTW
+      nameEN
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      id
+      email
+      empid
+      nameTW
+      nameEN
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      id
+      email
+      empid
+      nameTW
+      nameEN
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;

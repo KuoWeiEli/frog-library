@@ -123,28 +123,27 @@
       <v-col
           cols="12"
       >
-        <template>
-          <v-file-input
-              v-model="editedItem.cover"
-              :show-size="cover.showSize"
-              :counter="cover.counter"
-              :accept="cover.accept"
-              :rules="cover.rules"
-              :label="cover.label"
-              @change="upload"
-          >
-          </v-file-input>
-        </template>
+        <img-file
+            v-model="editedItem.cover"
+            :show-size="cover.showSize"
+            :counter="cover.counter"
+            :accept="cover.accept"
+            :rules="cover.rules"
+            :label="cover.label"
+            @upload="upload"
+        ></img-file>
       </v-col>
     </v-row>
   </v-form>
 </template>
 <script>
+import ImgFile from '@/components/form/element/ImgFile'
 import { bookStatus } from '@/model/book'
 import format from '@/services/format'
 
 export default {
   name: 'BookForm',
+  components: { ImgFile },
   props: {
     editedItem: {},
   },
@@ -197,22 +196,10 @@ export default {
     }
   },
   methods: {
-    upload() {
+    upload(imgFileUrl) {
       // coverChanged 初始值為 false，一旦經過上傳，將會變為 true
       this.editedItem.coverChanged = true
-      let vm = this
-
-      if (this.editedItem.cover) {
-        // 實現預覽圖片功能
-        let reader = new FileReader()
-        reader.onload = function(event) { // 當 reader 讀取完成後，會觸發 onload event，此時將 read 後的 url emit
-          vm.$emit('coverUpload', event.target.result)
-        }
-
-        reader.readAsDataURL(this.editedItem.cover)
-      } else {
-        vm.$emit('coverUpload', null)
-      }
+      this.$emit('coverUpload', imgFileUrl)
     }
   }
 }

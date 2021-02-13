@@ -1,5 +1,6 @@
 <template>
   <v-card
+      v-bind="$attrs"
       :loading="loading"
       :disabled="disabled"
   >
@@ -7,7 +8,7 @@
       <span class="headline">{{ title }}</span>
     </v-card-title>
 
-    <div class="d-flex flex-no-wrap justify-space-between">
+    <div class="d-sm-flex flex-sm-nowrap justify-sm-space-between">
       <slot name="prepend"></slot>
 
       <div>
@@ -20,20 +21,23 @@
     </div>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn
-          color="blue darken-1"
-          text
-          @click="$emit('close')"
-      >
-        Cancel
-      </v-btn>
-      <v-btn
-          color="blue darken-1"
-          text
-          @click="$emit('save')"
-      >
-        Save
-      </v-btn>
+
+      <slot name="action">
+        <v-btn
+            color="blue darken-1"
+            text
+            @click="$emit('close')"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+            color="blue darken-1"
+            text
+            @click="$emit('save')"
+        >
+          Save
+        </v-btn>
+      </slot>
     </v-card-actions>
   </v-card>
 </template>

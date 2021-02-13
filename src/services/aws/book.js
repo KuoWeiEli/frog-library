@@ -29,10 +29,10 @@ const bookService = {
                         .then(file => {
                             resolve({data, file})
                         })
-                        .catch(err => reject(err))
+                        .catch(reject)
 
                 })
-                .catch(err => reject(err))
+                .catch(reject)
         })
     },
 
@@ -45,25 +45,25 @@ const bookService = {
                             .then(file => {
                                 resolve({data, file})
                             })
-                            .catch(err => reject(err))
+                            .catch(reject)
                     else
                         resolve({data})
                 })
-                .catch(err => reject(err))
+                .catch(reject)
         })
     },
 
     deleteBook(id) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             db.mutations({id}, 'deleteBook')
                 .then(data => {
                     Storage.remove(bookCoverRef + id)
                         .then(file => {
                             resolve(data, file)
                         })
-                        .catch(err => console.log(err))
+                        .catch(reject)
                 })
-                .catch(err => console.log(err))
+                .catch(reject)
         })
     },
 
@@ -73,7 +73,7 @@ const bookService = {
                 .then(data => {
                     resolve(data.items)
                 })
-                .catch(err => reject(err))
+                .catch(reject)
         })
     },
 
@@ -109,18 +109,19 @@ const bookService = {
                                         })
                                     resolve(data.items)
                                 })
+                                .catch(reject)
                         })
-                        .catch(err => reject(err))
+                        .catch(reject)
                 })
-                .catch(err => reject(err))
+                .catch(reject)
         })
     },
 
     getBookCover(bookID) {
         return new Promise((resolve, reject) => {
             Storage.get(bookCoverRef + bookID)
-                .then(url => resolve(url))
-                .catch(err => reject(err))
+                .then(resolve)
+                .catch(reject)
         })
     },
 
