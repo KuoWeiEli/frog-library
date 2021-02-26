@@ -73,6 +73,7 @@
 import AuthService from '@/services/aws/auth'
 import UserService from '@/services/aws/user'
 import Msg from '@/services/msg'
+import {User} from '@/model/user'
 
 export default {
   name: 'navigation',
@@ -95,7 +96,7 @@ export default {
           if (info) {
             let {username} = info
             UserService.getUserAndAvatar(username)
-                .then(data => this.$store.commit('setUser', data))
+                .then(data => this.$store.commit('setUser', Object.assign(new User(), data)))
                 .catch(console.error)
           } else
             this.$store.commit('setUser', null)

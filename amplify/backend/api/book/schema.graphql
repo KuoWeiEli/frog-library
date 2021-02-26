@@ -10,6 +10,7 @@ type Book
   publishDate: String!
   status: String!
   createDate: String!
+  reservations: [Reservation] @connection(keyName: "reservationByBook", fields: ["id"])
 }
 
 type User @model
@@ -20,4 +21,24 @@ type User @model
   nameTW: String!
   nameEN: String!
   status: String!
+  reservations: [Reservation] @connection(keyName: "reservationByUser", fields: ["id"])
+}
+
+type Reservation
+  @model
+  @key(name: "reservationByUser", fields: ["userID", "applyDate"])
+  @key(name: "reservationByBook", fields: ["bookID", "applyDate"])
+{
+  id: ID!
+  applyDate: String!
+  reservationDate: String!
+  dueDate: String!
+  verifyDate: String
+  takeDate: String
+  returnDate: String
+  status: String!
+  userID: ID!
+  user: User @connection(fields: ["userID"])
+  bookID: ID!
+  book: Book @connection(fields: ["bookID"])
 }

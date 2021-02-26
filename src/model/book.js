@@ -11,10 +11,18 @@ class Book {
     }
 }
 
-const bookStatus =  {
+/** for 系統管理員 **/
+const bookStatus = {
     'L': '遺失',  // lost
     'B': '破損',  // broke
     'N': '可供借閱'// normal
 }
 
-export { Book, bookStatus }
+/** for 館藏資訊顯示給 User **/
+const bookCurrStatus = {
+    N: '可借閱',   // Normal
+    P: '借閱中',   // Pending
+    E: '不可借閱', // Error
+}
+
+export {Book, bookStatus, bookCurrStatus}

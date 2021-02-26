@@ -299,6 +299,7 @@
 
 <script>
 import reservationService from '@/services/firebase/reservations'
+import  {reservationStatus} from '@/model/reservation'
 
 export default {
   name: 'ReservationManagement',
@@ -317,7 +318,7 @@ export default {
       {text: '歸還時間', value: 'returnDate'},
     ],
     items: [],
-    reservationStatusMap: reservationService.reservationStatus,
+    reservationStatusMap: reservationStatus,
     editedIndex: -1,
     editedItem: {},
     defaultItem: {},

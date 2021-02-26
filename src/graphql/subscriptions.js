@@ -12,6 +12,23 @@ export const onCreateBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -28,6 +45,23 @@ export const onUpdateBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -44,6 +78,23 @@ export const onDeleteBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -58,6 +109,23 @@ export const onCreateUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -72,6 +140,23 @@ export const onUpdateUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -86,6 +171,161 @@ export const onDeleteUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateReservation = /* GraphQL */ `
+  subscription OnCreateReservation {
+    onCreateReservation {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateReservation = /* GraphQL */ `
+  subscription OnUpdateReservation {
+    onUpdateReservation {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteReservation = /* GraphQL */ `
+  subscription OnDeleteReservation {
+    onDeleteReservation {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

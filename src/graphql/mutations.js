@@ -15,6 +15,23 @@ export const createBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -34,6 +51,23 @@ export const updateBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -53,6 +87,23 @@ export const deleteBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -70,6 +121,23 @@ export const createUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -87,6 +155,23 @@ export const updateUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -104,6 +189,170 @@ export const deleteUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createReservation = /* GraphQL */ `
+  mutation CreateReservation(
+    $input: CreateReservationInput!
+    $condition: ModelReservationConditionInput
+  ) {
+    createReservation(input: $input, condition: $condition) {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateReservation = /* GraphQL */ `
+  mutation UpdateReservation(
+    $input: UpdateReservationInput!
+    $condition: ModelReservationConditionInput
+  ) {
+    updateReservation(input: $input, condition: $condition) {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteReservation = /* GraphQL */ `
+  mutation DeleteReservation(
+    $input: DeleteReservationInput!
+    $condition: ModelReservationConditionInput
+  ) {
+    deleteReservation(input: $input, condition: $condition) {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

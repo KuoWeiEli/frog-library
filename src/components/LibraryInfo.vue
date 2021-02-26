@@ -32,104 +32,36 @@
             <!--                New Reservation-->
             <!--              </v-btn>-->
             <!--            </template>-->
-            <v-card>
-              <v-card-title>
-                <span class="headline">Reservation</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                    >
-                      <v-text-field
-                          readonly
-                          v-model="editedItem.bookName"
-                          label="書刊名"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          readonly
-                          v-model="editedItem.author"
-                          label="作者"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
-                      <v-text-field
-                          readonly
-                          v-model="editedItem.applicant"
-                          label="申請人"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        lg="6"
-                    >
-                      <v-menu
-                          ref="menu1"
-                          v-model="menu1"
-                          :close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          max-width="290px"
-                          min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                              v-model="computedDateFormatted"
-                              label="預約時間"
-                              hint="預約日期只能選擇三天後!"
-                              persistent-hint
-                              v-bind="attrs"
-                              v-on="on"
-                              readonly
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="date"
-                            no-title
-                            :min="minDate"
-                            @input="menu1 = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+            <reservation-form
+                v-if="dialog"
+                :book="editedItem"
+                :user="user"
+                @success="closeDialog"
+                @cancel="closeDialog"
+            ></reservation-form>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:item.statusDisplay="{ item }">
+        <!-- 破損或遺失皆不可借閱-->
+        {{ item.statusDisplay = bookCurrStatus[/[BL]/.test(item.status) ? 'E' : 'N'] }}
+      </template>
 
+      <template v-slot:item.waitNum="{ item }">
+        {{ item.reservations ? item.reservations.length : 0 }}
+      </template>
+      <template v-slot:item.waitQueue="{ item }">
+        <v-chip
+            v-for="reservation in item.reservations"
+            :key="reservation.id"
+        >
+          <v-avatar left>
+            <v-img :src="reservation.user.userAvatar"></v-img>
+          </v-avatar>
+          {{ reservation.user.nameTW }}
+        </v-chip>
+      </template>
+      <template v-slot:item.actions="{ item }">
         <v-btn
             x-small
             text
@@ -151,110 +83,159 @@
 </template>
 
 <script>
-import libraryService from '@/services/firebase/libraryService'
+import BookService from '@/services/aws/book'
+import ReservationService from '@/services/aws/reservation'
+import UserService from '@/services/aws/user'
+import {Book, bookCurrStatus} from '@/model/book'
+import {User} from '@/model/user'
+import Msg from '@/services/msg'
+import ReservationForm from '@/components/form/ReservationForm'
 
 export default {
   name: 'LibraryInfo',
+  components: {ReservationForm},
   data: () => ({
     dialog: false,
     headers: [
       {text: '操作', value: 'actions', sortable: false},
-      {text: '書刊名', value: 'bookName'},
+      {text: '書刊名', value: 'name'},
       {text: '作者', value: 'author'},
       {text: '技術', value: 'tech'},
       {text: '狀態', value: 'statusDisplay'},
       {text: '預約人數', value: 'waitNum'},
+      {text: '等候佇列', value: 'waitQueue'}
     ],
     items: [],
-    editedIndex: -1,
-    editedItem: {},
-    defaultItem: {},
-    // reservation dialog
-    date: null,
-    minDate: null,
-    menu1: false,
-
+    editedItem: new Book(),
+    user: new User(),
+    bookCurrStatus: bookCurrStatus
   }),
 
-  computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.date)
-    },
-  },
 
-  watch: {
-    dialog(val) {
-      val || this.close()
-    }
-  },
+  // watch: {
+  //   dialog(val) {
+  //     val || this.close()
+  //   }
+  // },
 
   created() {
     this.initialize()
+    this.subscribe()
   },
 
   methods: {
-    initItem() {
-      return {
-        bookName: '',
-        author: '',
-        tech: '',
-        bookStatus: '',
-        waitNum: 0,
-      }
-    },
+    getRelatedMap: function (reservations) {
+      let bookReservationMap = {}
+      let userAvatarMap = {}
 
-    async initialize() {
-      libraryService.getAll()
-          .then(data => this.items = data)
+      reservations.forEach(each => {
+        // 將 reservations 集合變成 Map<BookID, Reservations> 的形式
+        let bookID = each.bookID
+        if (!bookReservationMap[bookID])
+          bookReservationMap[bookID] = []
+        bookReservationMap[bookID].push(each)
 
-      this.defaultItem = this.initItem()
-      this.editedItem = this.initItem()
+        // 處理 User Avatar，使成 Map<userID, avatarUrl> 形式
+        let userID = each.userID
+        if (!userAvatarMap[userID])
+          userAvatarMap[userID] = null
+      })
 
-      // dialog minDate
-      let tempDate = new Date()
-      tempDate.setDate(tempDate.getDate() + 4)
-      this.minDate = tempDate.toISOString().substr(0, 10)
-      this.date = this.minDate
+      return new Promise((resolve, reject) => {
+        let userIDs = Object.keys(userAvatarMap)
+        Promise.all(userIDs.map(UserService.getUserAvatar))
+            .then(urls => {
+              userIDs.forEach((userID, index) => {
+                userAvatarMap[userID] = urls[index]
+              })
+              resolve({bookReservationMap, userAvatarMap})
+            })
+            .catch(err => {
+              Msg.error(Msg.i18N.err_query, err)
+              reject()
+            })
+      })
+    }, initialize() {
+      Promise.all([BookService.getAll(), ReservationService.getAll()])
+          .then(([books, reservations]) => {
+
+            this.getRelatedMap(reservations)
+                .then(({bookReservationMap, userAvatarMap}) => {
+                  // books
+                  this.items = books
+                  this.items.forEach(book => {
+                    // 依照 bookReservationMap 取得該 book 的預約陣列
+                    book.reservations = bookReservationMap[book.id]
+                    // 如果該書有預約紀錄，依照 userAvatarMap 取得該 user 的大頭貼 Url
+                    if (book.reservations)
+                      book.reservations
+                          .forEach(each => {
+                            each.user.userAvatar = userAvatarMap[each.userID]
+                          })
+                  })
+                });
+          })
+          .catch(err => {
+            Msg.error(Msg.i18N.err_query, err)
+          })
     },
 
     editItem(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedItem = Object.assign(new Book(), item)
+      this.user = this.$store.state.user
       this.dialog = true
-
-      //test
-      this.editedItem.applicant = '0400-黃國維'
     },
 
-    close() {
+    closeDialog() {
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem)
-      } else {
-        this.items.push(this.editedItem)
-      }
-      this.close()
-
-      this.$message({
-        type: 'success',
-        message: '預約成功!'
-      })
+    getBook: function (bookID) {
+      let bookIndex = this.items.findIndex(item => item.id === bookID)
+      let book = this.items[bookIndex];
+      return book;
     },
 
+    subscribe() {
+      BookService.subscribe(
+          book => this.items.push(book),
+          book => {
+            let index = this.items.findIndex(item => item.id === book.id)
+            Object.assign(this.items[index], book)
+          },
+          book => {
+            let index = this.items.findIndex(item => item.id === book.id)
+            this.items.splice(index, 1)
+          })
 
-    formatDate(date) {
-      if (!date) return null
+      ReservationService.subscribe(
+          reservation => {
+            UserService.getUserAvatar(reservation.userID)
+                .then(url => {
+                  reservation.user.userAvatar = url
 
-      const [year, month, day] = date.split('-')
-      return `${year}/${month}/${day}`
-    }
+                  let book = this.getBook(reservation.bookID)
+                  if (!book.reservations)
+                    book.reservations = []
+                  book.reservations.push(reservation)
+                })
+                .catch(err => {
+                  Msg.error(Msg.i18N.err_query, err)
+                })
+          },
+          reservation => {
+            let book = this.getBook(reservation.bookID)
+            let reservationIndex = book.reservations.findIndex(item => item.id === reservation.id)
+            Object.assign(book.reservations[reservationIndex], reservation)
+          },
+          reservation => {
+            let book = this.getBook(reservation.bookID);
+            let reservationIndex = book.reservations.findIndex(item => item.id === reservation.id)
+            book.reservations.splice(reservationIndex, 1)
+          }
+
+      )
+    },
   }
 }
 </script>

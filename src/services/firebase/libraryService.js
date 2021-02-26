@@ -2,12 +2,6 @@ import bookService from '@/services/firebase/book'
 import reservationService from '@/services/firebase/reservations'
 
 const libraryService = {
-    bookCurrStatus: {
-        N: '可借閱',   // Normal
-        P: '借閱中',   // Pending
-        E: '不可借閱', // Error
-    },
-
     getAll() {
         function getBooks() {
             return new Promise(resolve => {

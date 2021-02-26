@@ -12,6 +12,23 @@ export const getBook = /* GraphQL */ `
       publishDate
       status
       createDate
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -33,6 +50,9 @@ export const listBooks = /* GraphQL */ `
         publishDate
         status
         createDate
+        reservations {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -49,6 +69,23 @@ export const getUser = /* GraphQL */ `
       nameTW
       nameEN
       status
+      reservations {
+        items {
+          id
+          applyDate
+          reservationDate
+          dueDate
+          verifyDate
+          takeDate
+          returnDate
+          status
+          userID
+          bookID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -68,6 +105,102 @@ export const listUsers = /* GraphQL */ `
         nameTW
         nameEN
         status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getReservation = /* GraphQL */ `
+  query GetReservation($id: ID!) {
+    getReservation(id: $id) {
+      id
+      applyDate
+      reservationDate
+      dueDate
+      verifyDate
+      takeDate
+      returnDate
+      status
+      userID
+      user {
+        id
+        email
+        empid
+        nameTW
+        nameEN
+        status
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      bookID
+      book {
+        id
+        name
+        author
+        tech
+        publisher
+        publishDate
+        status
+        createDate
+        reservations {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listReservations = /* GraphQL */ `
+  query ListReservations(
+    $filter: ModelReservationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReservations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        applyDate
+        reservationDate
+        dueDate
+        verifyDate
+        takeDate
+        returnDate
+        status
+        userID
+        user {
+          id
+          email
+          empid
+          nameTW
+          nameEN
+          status
+          createdAt
+          updatedAt
+        }
+        bookID
+        book {
+          id
+          name
+          author
+          tech
+          publisher
+          publishDate
+          status
+          createDate
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -101,6 +234,9 @@ export const bookByStatus = /* GraphQL */ `
         publishDate
         status
         createDate
+        reservations {
+          nextToken
+        }
         createdAt
         updatedAt
       }
