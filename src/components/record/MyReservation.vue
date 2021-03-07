@@ -1,61 +1,119 @@
 <template>
   <div>
-    <el-card
-        v-for="(reservation, index) in myReservations"
-        :key="reservation.seq"
+    <v-data-table
+        :headers="headers"
+        :items="items"
+        sort-by="tech"
+        show-expand
+        class="elevation-1"
     >
-      <div slot="header">
-        <span>{{ '#' + (myReservations.length - index) + '  ' + reservation.bookName }}{{ '（測試說明:' + reservation.testName + '）' }}</span>
-        <!--        <el-button style="float: right; padding: 3px 0" type="text">取消</el-button>-->
-      </div>
+      <template v-slot:item.actions="{item}">
+        <!-- 當預約狀態在「待審核」、「待取書」時，皆可以使用取消功能 -->
+        <v-btn
+            v-show="/[23]/.test(item.status)"
+            x-small
+            text
+            icon
+            class="mr-2"
+            color="primary"
+            @click="cancel(item)"
+        >
+          <v-icon small>
+            mdi-cancel
+          </v-icon>
+          取消
+        </v-btn>
+      </template>
 
-      <el-steps :active="reservation.activeStep" align-center>
-        <template v-if="isLoaded">
-          <el-step
-              v-for="step in reservation.steps"
-              :key="step.title"
-              :title="step.title"
-              :status="step.status">
-            <template v-slot:description>
-              {{ step.desc }}<br v-if="step.desc"/>{{ step.statusDesc }}
-            </template>
-          </el-step>
-        </template>
-      </el-steps>
-    </el-card>
+      <template v-slot:item.status="{ item }">
+        {{ reservationStatus[item.status] }}
+      </template>
+
+      <template v-slot:item.bookName="{ item }">
+        {{ item.book.name }}
+      </template>
+
+      <template v-slot:expanded-item="{headers, item}">
+        <td :colspan="headers.length">
+          <div class="flow">
+            <el-steps :active="item.activeStep" align-center>
+              <template v-if="isLoaded">
+                <el-step
+                    v-for="step in item.steps"
+                    :key="step.title"
+                    :title="step.title"
+                    :status="step.status">
+                  <template v-slot:description>
+                    {{ step.desc }}<br v-if="step.desc"/>{{ step.statusDesc }}
+                  </template>
+                </el-step>
+              </template>
+            </el-steps>
+          </div>
+        </td>
+      </template>
+
+      <template v-slot:top>
+        <v-toolbar
+            flat
+        >
+          <v-toolbar-title>我的預約</v-toolbar-title>
+          <v-divider
+              class="mx-4"
+              inset
+              vertical
+          ></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </template>
+    </v-data-table>
+
+    <simple-dialog ref="dialog" persistent></simple-dialog>
   </div>
 </template>
 
 <script>
-import reservationService from '@/services/firebase/reservations'
+import ReservationService from '@/services/aws/reservation'
+import {Reservation, reservationStatus} from '@/model/reservation'
+import {User} from '@/model/user'
+import Msg from '@/services/msg'
+import SimpleDialog from '@/components/core/SimpleDialog'
 
 export default {
   name: "MyReservation",
-  data() {
-    return {
-      myReservations: {},
-      isLoaded: false
-    }
-  },
+  data: () => ({
+    headers: [
+      {text: '操作', value: 'actions', sortable: false},
+      {text: '狀態', value: 'status'},
+      {text: '書刊名', value: 'bookName'},
+      {text: '申請時間', value: 'applyDate'},
+      {text: '預約起日', value: 'reservationDate'},
+      {text: '到期時間', value: 'dueDate'},
+      {text: '審核時間', value: 'verifyDate'},
+      {text: '取書時間', value: 'takeDate'},
+      {text: '歸還時間', value: 'returnDate'},
+      {text: '流程圖', value: 'data-table-expand'}
+    ],
+    items: [],
+    user: new User(),
+    isLoaded: false,
+    reservationStatus: reservationStatus
+  }),
+  components: {SimpleDialog},
   created() {
-    this.initial()
+    this.user = this.$store.state.user
+    this.initialize()
+    this.subscribe()
   },
   methods: {
-    async initial() {
-      console.log('initial')
-      await this.getMyReservations()
-      this.configureStep()
-      this.isLoaded = true
-      console.log('initial finish')
-    },
-    getMyReservations() {
-      return new Promise(resolve => {
-        reservationService.getByUserId('0400')
-            .then(data => {
-              this.myReservations = data
-              resolve()
-            })
-      })
+    initialize() {
+      ReservationService.getAllByUserID(this.user.id)
+          .then(data => {
+            this.items = data
+            this.configureStep()
+            this.isLoaded = true
+          })
+          .catch(err => Msg.error(Msg.i18N.err_query, err))
     },
     createStep(title, desc, status, statusDesc) {
       return {
@@ -76,16 +134,15 @@ export default {
        * 4: Step4
        */
 
-      console.log('configure step')
-      this.myReservations.forEach(each => {
-        each.steps = []
-        each.activeStep = 0
-        each.steps.push(this.createStep1(each))
-        each.steps.push(this.createStep2(each))
-        each.steps.push(this.createStep3(each))
-        each.steps.push(this.createStep4(each))
-      })
-      console.log(this.myReservations)
+      this.items.forEach(this.createSteps)
+    },
+    createSteps(reservation) {
+      reservation.steps = []
+      reservation.activeStep = 0
+      reservation.steps.push(this.createStep1(reservation))
+      reservation.steps.push(this.createStep2(reservation))
+      reservation.steps.push(this.createStep3(reservation))
+      reservation.steps.push(this.createStep4(reservation))
     },
     createStep1(each) {
       each.activeStep++
@@ -145,12 +202,52 @@ export default {
       return this.createStep('歸還', each.activeStep > 2 ? (each.returnDate ? `歸還時間：${each.returnDate}` : `到期時間：${each.dueDate}`) : '',
           each.returnDate ? 'success' : (isTimeout ? 'error' : ''),
           each.returnDate ? '已歸還' : (isTimeout ? '已逾期' : ''));
+    },
+    cancel(item) {
+      this.$refs.dialog
+          .open({
+            title: '取消預約提醒',
+            msg: `你確定要取消預約【${item.book.name}】這本書嗎？`
+          })
+          .then(agree => {
+            if (agree)
+              this.cancelReservation(item)
+          })
+          .catch(() => {})
+    },
+    cancelReservation(item) {
+      let reservation = Object.assign(new Reservation(), item)
+      reservation.status = 'C'
+
+      ReservationService.updateReservation(reservation)
+          .then(() => Msg.success(Msg.i18N.success_reservation_cancel))
+          .catch(err => Msg.error(Msg.i18N.err_reservation_cancel, err))
+    },
+
+    subscribe() {
+      ReservationService.subscribe(
+          reservation => {
+            this.items.push(reservation)
+            this.createSteps(reservation)
+          },
+          reservation => {
+            let index = this.items.findIndex(item => item.id === reservation.id)
+            let target = this.items[index]
+            Object.assign(target, reservation)
+            this.createSteps(target)
+          },
+          reservation => {
+            let index = this.items.findIndex(item => item.id === reservation.id)
+            this.items.splice(index, 1)
+          })
     }
   }
 }
 </script>
 
 <style scoped>
-
+.flow {
+  padding: 20px 0px
+}
 
 </style>

@@ -1,4 +1,4 @@
-import { Reservation } from '@/model/reservation'
+import {Reservation} from '@/model/reservation'
 import * as db from '@/services/aws/db'
 
 const reservationConverter = function (reservation) {
@@ -42,13 +42,25 @@ const reservationService = {
         })
     },
 
-    getAll() {
+    getReservations(filter) {
         return new Promise((resolve, reject) => {
-            db.queries('listReservations')
+            db.queries('listReservations', filter ? {filter} : null)
                 .then(data => {
                     resolve(data.items)
                 })
                 .catch(reject)
+        })
+    },
+
+    getAll() {
+        return this.getReservations();
+    },
+
+    getAllByUserID(userID) {
+        return this.getReservations({
+            userID: {
+                eq: userID
+            }
         })
     },
 

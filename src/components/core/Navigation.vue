@@ -71,9 +71,7 @@
 <script>
 
 import AuthService from '@/services/aws/auth'
-import UserService from '@/services/aws/user'
 import Msg from '@/services/msg'
-import {User} from '@/model/user'
 
 export default {
   name: 'navigation',
@@ -81,27 +79,6 @@ export default {
     drawer: {
       isOpen: {}
     },
-  },
-  created() {
-    // 訂閱使用者
-    this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'setUser') {
-        this.user = state.user
-      }
-    })
-
-    // 檢查使用者是否還存在登入狀態，如果有的話則取得資料
-    AuthService.currentUserInfo()
-        .then(info => {
-          if (info) {
-            let {username} = info
-            UserService.getUserAndAvatar(username)
-                .then(data => this.$store.commit('setUser', Object.assign(new User(), data)))
-                .catch(console.error)
-          } else
-            this.$store.commit('setUser', null)
-        })
-        .catch(console.error)
   },
   data: () => ({
     items: [
@@ -113,17 +90,27 @@ export default {
     ],
     user: {}
   }),
+  created() {
+    console.log('Navigation created')
+    this.user = this.$store.state.user
+
+    // Navigation 元件只有在一開始或重新整理才會執行 created
+    // 因此訂閱資訊，使得能夠實時更新使用者資訊
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'setUser') {
+        this.user = state.user
+      }
+    })
+    console.log('Navigation created end')
+  },
   methods: {
     signOut() {
       AuthService.signOut()
           .then(() => {
-            Msg.success('已成功登出！')
+            Msg.success(Msg.i18N.success_sign_out)
             this.$store.commit('setUser', null)
           })
-          .catch(err => {
-            console.log(err)
-            Msg.error('登出發生錯誤！請稍後再試！')
-          })
+          .catch(err => Msg.error(Msg.i18N.err_sign_out, err))
     }
   }
 }

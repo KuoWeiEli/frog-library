@@ -182,7 +182,7 @@ export default {
 
     editItem(item) {
       this.editedItem = Object.assign(new Book(), item)
-      this.user = this.$store.state.user
+      this.user = Object.assign(new User(), this.$store.state.user)
       this.dialog = true
     },
 
@@ -193,7 +193,7 @@ export default {
     getBook: function (bookID) {
       let bookIndex = this.items.findIndex(item => item.id === bookID)
       let book = this.items[bookIndex];
-      return book;
+      return book
     },
 
     subscribe() {
