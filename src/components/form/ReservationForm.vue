@@ -20,26 +20,24 @@
             >
               <v-text-field
                   readonly
-                  v-model="book.name"
+                  v-model="reservation.book.name"
                   :rules="rules.book"
                   label="書刊名"
               ></v-text-field>
             </v-col>
             <v-col
                 cols="12"
-                sm="6"
-                md="4"
+                md="8"
             >
               <v-text-field
                   readonly
-                  v-model="book.author"
+                  v-model="reservation.book.author"
                   :rules="rules.book"
                   label="作者"
               ></v-text-field>
             </v-col>
             <v-col
                 cols="12"
-                sm="6"
                 md="4"
             >
               <v-text-field
@@ -66,7 +64,7 @@
                   <v-text-field
                       v-model="reservationDateFormatted"
                       label="預約時間"
-                      hint="預約日期只能選擇三天後！"
+                      :hint="isManageMode? '預約日期不可在使用者申請時間之前': '預約日期只能選擇三天後！'"
                       :rules="rules.reservation"
                       persistent-hint
                       v-bind="attrs"
@@ -75,7 +73,7 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                    v-model="calendar.value"
+                    v-model="calendar.reservationDate"
                     range
                     no-title
                     scrollable
@@ -94,11 +92,113 @@
                   <v-btn
                       text
                       color="primary"
-                      @click="$refs.reservationDateMenu.save(calendar.value)"
+                      @click="$refs.reservationDateMenu.save(calendar.reservationDate)"
                   >
                     OK
                   </v-btn>
                 </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col
+                v-if="isManageMode"
+                cols="12"
+                lg="6"
+            >
+              <v-menu
+                  ref="verifyDateMenu"
+                  v-model="calendar.verifyDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                      v-model="verifyDateFormatted"
+                      label="審核時間"
+                      hint="審核時間只能在申請時間與取書時間之間"
+                      persistent-hint
+                      v-bind="attrs"
+                      v-on="on"
+                      readonly
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="form.verifyDate"
+                    no-title
+                    :min="calendar.verifyDateMinDate"
+                    :max="verifyMaxDate"
+                    @input="calendar.verifyDateMenu = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col
+                v-if="isManageMode"
+                cols="12"
+                lg="6"
+            >
+              <v-menu
+                  ref="takeDateMenu"
+                  v-model="calendar.takeDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                      v-model="takeDateFormatted"
+                      label="取書時間"
+                      hint="取書時間只能在審核時間與歸還時間之間"
+                      persistent-hint
+                      v-bind="attrs"
+                      v-on="on"
+                      readonly
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="form.takeDate"
+                    no-title
+                    :min="takeMinDate"
+                    :max="takeMaxDate"
+                    @input="calendar.takeDateMenu = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col
+                v-if="isManageMode"
+                cols="12"
+                lg="6"
+            >
+              <v-menu
+                  ref="returnDateMenu"
+                  v-model="calendar.returnDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                  :disabled="!form.takeDate"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                      v-model="returnDateFormatted"
+                      label="歸還時間"
+                      hint="歸還時間只能在取書時間之後（含）"
+                      persistent-hint
+                      v-bind="attrs"
+                      v-on="on"
+                      readonly
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="form.returnDate"
+                    no-title
+                    :min="returnMinDate"
+                    @input="calendar.returnDateMenu = false"
+                ></v-date-picker>
               </v-menu>
             </v-col>
             <v-btn
@@ -110,12 +210,13 @@
       </v-container>
     </v-card-text>
 
-    <v-card-actions>
+    <!-- 查看預約時，隱藏動作列 -->
+    <v-card-actions v-show="reservation.editable">
       <v-spacer></v-spacer>
       <v-btn
           color="blue darken-1"
           text
-          @click="$emit('cancel')"
+          @click="cancel"
       >
         Cancel
       </v-btn>
@@ -133,22 +234,36 @@
 <script>
 import format from '@/services/format'
 import Msg from '@/services/msg'
-import {Book} from '@/model/book'
-import {User} from '@/model/user'
-import {Reservation} from '@/model/reservation'
+import {Reservation, reservationStatusStep} from '@/model/reservation'
 import ReservationService from '@/services/aws/reservation'
 
 export default {
   name: 'ReservationForm',
   props: {
-    book: Book,
-    user: User
+    reservation: Reservation,
+    // 是否為管理員模式
+    isManageMode: {
+      type: Boolean,
+      default: false
+    }
   },
+  inject: ['agree', 'cancel'],
   data: () => ({
     calendar: {
+      // 預約起訖日
       reservationMinDate: null,
       reservationDateMenu: false,
-      value: []
+      reservationDate: [],
+
+      // 審核時間
+      verifyDateMinDate: null,
+      verifyDateMenu: false,
+      // 取書時間
+      takeDateMinDate: null,
+      takeDateMenu: false,
+      // 歸還時間
+      returnDateMinDate: null,
+      returnDateMenu: false
     },
     valid: true,
     form: new Reservation(),
@@ -166,42 +281,99 @@ export default {
     }
   }),
   created() {
-    // 預約日期只能選擇三天後
-    let tempDate = new Date()
-    tempDate.setDate(tempDate.getDate() + 4)
-    this.calendar.reservationMinDate = tempDate.toISOString().substr(0, 10)
+    Object.assign(this.form, this.reservation)
+
+    if (this.isManageMode) {
+      // 查看預約時，不可更改任何欄位
+      this.card.disabled = !this.reservation.editable
+      this.calendar.reservationDate = [this.reservation.reservationDate, this.reservation.dueDate]
+      // 因為申請日一開始就有，所以可以在這裡設置 MinDate，其餘需要使用 Computed Function
+      // 預約日期不可在使用者申請日之前
+      this.calendar.reservationMinDate = this.form.applyDate
+      // 審核日不可在使用者申請日之前
+      this.calendar.verifyDateMinDate = this.form.applyDate
+    } else {
+      // 預約日期只能選擇三天後
+      let tempDate = new Date()
+      tempDate.setDate(tempDate.getDate() + 4)
+      this.calendar.reservationMinDate = format.toDateStr(tempDate)
+    }
+
   },
   computed: {
     reservationMaxDate() {
-      if (this.calendar.value.length > 0) {
-        let [start] = this.calendar.value
+      if (this.calendar.reservationDate.length > 0) {
+        let [start] = this.calendar.reservationDate
         // 預約 MAX 日期同到期時間，為預約日期往後 30 天
         let tempDate = new Date(start)
         tempDate.setDate(tempDate.getDate() + 30)
-        return tempDate.toISOString().substr(0, 10)
+        return format.toDateStr(tempDate)
       }
       return null
     },
+    verifyMaxDate() {
+      let date = this.form.takeDate
+      return date ? date : null
+    },
+    takeMinDate() {
+      let date = this.form.verifyDate
+      return date ? date : null
+    },
+    takeMaxDate() {
+      let date = this.form.returnDate
+      return date ? date : null
+    },
+    returnMinDate() {
+      let date = this.form.takeDate
+      return date ? date : null
+    },
     reservationDateFormatted() {
-      return this.calendar.value.map(format.formatDate).join(' ~ ')
+      return this.calendar.reservationDate.map(format.formatDate).join(' ~ ')
+    },
+    verifyDateFormatted() {
+      let date = this.form.verifyDate
+      return date ? format.formatDate(date) : null
+    },
+
+    takeDateFormatted() {
+      let date = this.form.takeDate
+      return date ? format.formatDate(date) : null
+    },
+
+    returnDateFormatted() {
+      let date = this.form.returnDate
+      return date ? format.formatDate(date) : null
     },
     applicant() {
-      return this.user.empid + `-` + this.user.nameTW
+      return this.reservation.user.empid + `-` + this.reservation.user.nameTW
     }
   },
   methods: {
     reservationDateInput() {
-      this.calendar.value.sort()
+      this.calendar.reservationDate.sort()
     },
     processData() {
-      let [start, end] = this.calendar.value
-
+      let [start, end] = this.calendar.reservationDate
       this.form.reservationDate = start
       this.form.dueDate = end
-      this.form.applyDate = new Date().toISOString().substr(0, 10)
-      this.form.status = '2'  // Ref reservationStatus['2'] 待審核
-      this.form.userID = this.user.id
-      this.form.bookID = this.book.id
+
+      if (this.isManageMode) {
+        this.managerProcess()
+      } else {
+        this.userProcess()
+      }
+    },
+    /** 使用者使用預約的處理 **/
+    userProcess() {
+      this.form.applyDate = format.toDateStr(new Date())
+      this.form.status = reservationStatusStep.STEP2
+    },
+
+    /** 管理員使用預約的處理 **/
+    managerProcess() {
+      // 從最後的日期（歸還日）往前判斷預約的狀態，管理者編輯的這一步狀態已為「已取書」
+      this.form.status = this.form.returnDate ? reservationStatusStep.END :
+          this.form.takeDate ? reservationStatusStep.STEP4 : reservationStatusStep.STEP3;
     },
     save() {
       if (!this.$refs.reservationForm.validate()) return
@@ -210,17 +382,20 @@ export default {
       this.card.disabled = true
 
       this.processData()
-      ReservationService.createReservation(this.form)
-          .then(() => {
-            Msg.success(Msg.i18N.success_reservation)
-            this.$emit('success')
-          })
-          .catch(err => Msg.error(Msg.i18N.err_reservation, err))
+      // 管理者使用更新，使用者使用建立
+      let method = (this.isManageMode ? 'update' : 'create') + 'Reservation'
+      let msg = this.isManageMode ? Msg.i18N.success_reservation_save : Msg.i18N.success_reservation
+      let errMsg = this.isManageMode ? Msg.i18N.err_reservation_save : Msg.i18N.err_reservation
+
+      ReservationService[method](this.form)
+          .then(() => Msg.success(msg))
+          .catch(err => Msg.error(errMsg, err))
           .finally(() => {
+            this.agree()
             this.card.loading = false
             this.card.disabled = false
           })
-    },
+    }
   }
 }
 </script>

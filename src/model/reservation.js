@@ -24,4 +24,15 @@ const reservationStatus = {
     4: '待歸還'  // step4
 }
 
-export {Reservation, reservationStatus}
+// ref reservationStatus
+const reservationStatusStep = {
+    END: 'E',
+    DENY: 'D',
+    TIMEOUT: 'T',
+    CANCEL: 'C',
+    STEP2: '2',
+    STEP3: '3',
+    STEP4: '4'
+}
+
+export {Reservation, reservationStatus, reservationStatusStep}

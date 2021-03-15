@@ -17,29 +17,6 @@
               vertical
           ></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog
-              v-model="dialog"
-              max-width="500px"
-          >
-            <!--            <template v-slot:activator="{ on, attrs }">-->
-            <!--              <v-btn-->
-            <!--                  color="primary"-->
-            <!--                  dark-->
-            <!--                  class="mb-2"-->
-            <!--                  v-bind="attrs"-->
-            <!--                  v-on="on"-->
-            <!--              >-->
-            <!--                New Reservation-->
-            <!--              </v-btn>-->
-            <!--            </template>-->
-            <reservation-form
-                v-if="dialog"
-                :book="editedItem"
-                :user="user"
-                @success="closeDialog"
-                @cancel="closeDialog"
-            ></reservation-form>
-          </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.statusDisplay="{ item }">
@@ -77,9 +54,20 @@
         </v-btn>
       </template>
     </v-data-table>
+
+    <simple-dialog
+        ref="dialog"
+    >
+      <template
+          v-slot:default="{ dialog }"
+      >
+        <reservation-form
+            v-if="dialog"
+            :reservation="editedItem"
+        ></reservation-form>
+      </template>
+    </simple-dialog>
   </div>
-
-
 </template>
 
 <script>
@@ -90,12 +78,13 @@ import {Book, bookCurrStatus} from '@/model/book'
 import {User} from '@/model/user'
 import Msg from '@/services/msg'
 import ReservationForm from '@/components/form/ReservationForm'
+import SimpleDialog from '@/components/core/SimpleDialog'
+import {Reservation} from "@/model/reservation";
 
 export default {
   name: 'LibraryInfo',
-  components: {ReservationForm},
+  components: {ReservationForm, SimpleDialog},
   data: () => ({
-    dialog: false,
     headers: [
       {text: '操作', value: 'actions', sortable: false},
       {text: '書刊名', value: 'name'},
@@ -106,17 +95,9 @@ export default {
       {text: '等候佇列', value: 'waitQueue'}
     ],
     items: [],
-    editedItem: new Book(),
-    user: new User(),
+    editedItem: new Reservation(),
     bookCurrStatus: bookCurrStatus
   }),
-
-
-  // watch: {
-  //   dialog(val) {
-  //     val || this.close()
-  //   }
-  // },
 
   created() {
     this.initialize()
@@ -155,7 +136,8 @@ export default {
               reject()
             })
       })
-    }, initialize() {
+    },
+    initialize() {
       Promise.all([BookService.getAll(), ReservationService.getAll()])
           .then(([books, reservations]) => {
 
@@ -181,13 +163,16 @@ export default {
     },
 
     editItem(item) {
-      this.editedItem = Object.assign(new Book(), item)
-      this.user = Object.assign(new User(), this.$store.state.user)
-      this.dialog = true
-    },
+      this.editedItem.book = Object.assign(new Book(), item)
+      this.editedItem.bookID = this.editedItem.book.id
+      this.editedItem.user = Object.assign(new User(), this.$store.state.user)
+      this.editedItem.userID = this.editedItem.user.id
 
-    closeDialog() {
-      this.dialog = false
+      this.$refs
+          .dialog
+          .open({}, {width: 800})
+          .then(Function)
+          .catch(Function)
     },
 
     getBook: function (bookID) {
@@ -233,7 +218,6 @@ export default {
             let reservationIndex = book.reservations.findIndex(item => item.id === reservation.id)
             book.reservations.splice(reservationIndex, 1)
           }
-
       )
     },
   }

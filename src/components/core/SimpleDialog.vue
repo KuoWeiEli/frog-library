@@ -4,7 +4,9 @@
       v-model="dialog"
       :width="options.width"
   >
-    <simple-card :card-props="dialogProps"/>
+    <slot v-bind:dialog="dialog">
+      <simple-card :card-props="dialogProps"/>
+    </slot>
   </v-dialog>
 </template>
 
