@@ -40,6 +40,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn
+            v-show="enabledReservation"
             x-small
             text
             icon
@@ -79,7 +80,7 @@ import {User} from '@/model/user'
 import Msg from '@/services/msg'
 import ReservationForm from '@/components/form/ReservationForm'
 import SimpleDialog from '@/components/core/SimpleDialog'
-import {Reservation} from "@/model/reservation";
+import {Reservation, isPendding} from "@/model/reservation";
 
 export default {
   name: 'LibraryInfo',
@@ -98,6 +99,22 @@ export default {
     editedItem: new Reservation(),
     bookCurrStatus: bookCurrStatus
   }),
+  computed: {
+    /** 如果使用者已有預約，且狀態為下列三點其中一點「待審核」、「待取書」、「待歸還」，則不可以預約。未登入者不可預約 **/
+    enabledReservation() {
+      let id = this.$store.state.user.id
+      let hasReservation = false
+      if (this.items) {
+        let userIDs = this.items.map(each => each.reservations)
+                  .reduce((a, b) => a.concat(b), [])
+                  .filter(Boolean)
+                  .map(reservation => reservation.userID)
+        hasReservation = userIDs.includes(id)
+      }
+
+      return !!id && !hasReservation
+    }
+  },
 
   created() {
     this.initialize()
@@ -110,16 +127,19 @@ export default {
       let userAvatarMap = {}
 
       reservations.forEach(each => {
-        // 將 reservations 集合變成 Map<BookID, Reservations> 的形式
-        let bookID = each.bookID
-        if (!bookReservationMap[bookID])
-          bookReservationMap[bookID] = []
-        bookReservationMap[bookID].push(each)
+        // 等待佇列只包含預約狀態為「待審核」、「待取書」、「待歸還」
+        if (isPendding(each.status)) {
+          // 將 reservations 集合變成 Map<BookID, Reservations> 的形式
+          let bookID = each.bookID
+          if (!bookReservationMap[bookID])
+            bookReservationMap[bookID] = []
+          bookReservationMap[bookID].push(each)
 
-        // 處理 User Avatar，使成 Map<userID, avatarUrl> 形式
-        let userID = each.userID
-        if (!userAvatarMap[userID])
-          userAvatarMap[userID] = null
+          // 處理 User Avatar，使成 Map<userID, avatarUrl> 形式
+          let userID = each.userID
+          if (!userAvatarMap[userID])
+            userAvatarMap[userID] = null
+        }
       })
 
       return new Promise((resolve, reject) => {

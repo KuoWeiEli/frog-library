@@ -35,4 +35,9 @@ const reservationStatusStep = {
     STEP4: '4'
 }
 
-export {Reservation, reservationStatus, reservationStatusStep}
+/** 是否為等待狀態：STEP2~4 **/
+function isPendding(status) {
+    return /[234]/.test(status)
+}
+
+export {Reservation, reservationStatus, reservationStatusStep, isPendding}
