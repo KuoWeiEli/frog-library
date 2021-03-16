@@ -68,6 +68,8 @@
         ></reservation-form>
       </template>
     </simple-dialog>
+
+    <simple-dialog ref="tipDialog" persistent></simple-dialog>
   </div>
 </template>
 
@@ -80,7 +82,8 @@ import {User} from '@/model/user'
 import Msg from '@/services/msg'
 import ReservationForm from '@/components/form/ReservationForm'
 import SimpleDialog from '@/components/core/SimpleDialog'
-import {Reservation, isPendding} from "@/model/reservation";
+import {Reservation, isPendding} from '@/model/reservation'
+import instruction from '@/assets/doc/reservation_instructions'
 
 export default {
   name: 'LibraryInfo',
@@ -183,6 +186,19 @@ export default {
     },
 
     editItem(item) {
+      this.$refs.tipDialog
+          .open({
+            title: '預約注意事項',
+            msg: instruction
+          },{ width: 800 })
+          .then(agree => {
+            if (agree)
+              this.reserve(item)
+          })
+          .catch(() => {})
+    },
+
+    reserve(item) {
       this.editedItem.book = Object.assign(new Book(), item)
       this.editedItem.bookID = this.editedItem.book.id
       this.editedItem.user = Object.assign(new User(), this.$store.state.user)
