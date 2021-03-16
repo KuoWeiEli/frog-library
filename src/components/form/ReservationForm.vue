@@ -210,8 +210,8 @@
       </v-container>
     </v-card-text>
 
-    <!-- 查看預約時，隱藏動作列 -->
-    <v-card-actions v-show="reservation.editable">
+    <!-- 當為管理者模式，查看預約時，隱藏動作列 -->
+    <v-card-actions v-show="!isManageMode || reservation.editable">
       <v-spacer></v-spacer>
       <v-btn
           color="blue darken-1"

@@ -32,7 +32,7 @@
               nav
           >
             <v-list-item
-                v-for="item in items"
+                v-for="item in getItems"
                 :key="item.title"
                 :to="item.url"
                 link
@@ -90,6 +90,20 @@ export default {
     ],
     user: {}
   }),
+  computed: {
+    /** 依照有無登入開放其功能 **/
+    getItems() {
+      let items = [{title: '館藏資訊', icon: 'mdi-bookshelf', url: '/library-info'}]
+
+      if (this.$store.state.user.id) {
+        items.push({title: '我的預約', icon: 'mdi-account-clock', url: '/my-reservation'},
+            {title: '預約管理', icon: 'mdi-book-account', url: '/reservation-management'},
+            {title: '書庫管理', icon: 'mdi-book-cog', url: '/book-management'},
+            {title: '員工管理', icon: 'mdi-account-group', url: '/user-management'})
+      }
+      return items
+    }
+  },
   created() {
     console.log('Navigation created')
     this.user = this.$store.state.user
