@@ -64,7 +64,7 @@
                   <v-text-field
                       v-model="reservationDateFormatted"
                       label="預約時間"
-                      :hint="isManageMode? '預約日期不可在使用者申請時間之前': '預約日期只能選擇三天後！'"
+                      :hint="isManageMode? '預約日期不可在使用者申請時間之前': '預約日期只能選擇三天後，日期不可選擇在等待佇列中的預約時段！'"
                       :rules="rules.reservation"
                       persistent-hint
                       v-bind="attrs"
@@ -79,6 +79,7 @@
                     scrollable
                     :min="calendar.reservationMinDate"
                     :max="reservationMaxDate"
+                    :allowed-dates="allowReservationDates"
                     @input="reservationDateInput"
                 >
                   <v-spacer></v-spacer>
@@ -349,6 +350,15 @@ export default {
     }
   },
   methods: {
+    /** 選擇的預約日期不可以在預約佇列的預約時段中 **/
+    allowReservationDates(val) {
+      let queue = this.form.book.reservations
+      return !queue || queue.filter(r => {
+        // 日期在預約時段中
+        return !(val > r.reservationDate && val < r.dueDate)
+      }).length
+    },
+
     reservationDateInput() {
       this.calendar.reservationDate.sort()
     },

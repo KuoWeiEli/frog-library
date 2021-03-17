@@ -11,8 +11,8 @@
     >
       <template v-slot:top>
         <simple-tool-bar
-          title="館藏資訊"
-          v-model="search"
+            title="館藏資訊"
+            v-model="search"
         ></simple-tool-bar>
       </template>
       <template v-slot:item.statusDisplay="{ item }">
@@ -27,6 +27,7 @@
         <v-chip
             v-for="reservation in item.reservations"
             :key="reservation.id"
+            @click="showReservation(reservation)"
         >
           <v-avatar left>
             <v-img :src="reservation.user.userAvatar"></v-img>
@@ -65,7 +66,8 @@
       </template>
     </simple-dialog>
 
-    <simple-dialog ref="tipDialog" persistent></simple-dialog>
+    <simple-dialog ref="instructionDialog" persistent></simple-dialog>
+    <simple-dialog ref="tipDialog"></simple-dialog>
   </div>
 </template>
 
@@ -108,9 +110,9 @@ export default {
       let hasReservation = false
       if (this.items) {
         let userIDs = this.items.map(each => each.reservations)
-                  .reduce((a, b) => a.concat(b), [])
-                  .filter(Boolean)
-                  .map(reservation => reservation.userID)
+            .reduce((a, b) => a.concat(b), [])
+            .filter(Boolean)
+            .map(reservation => reservation.userID)
         hasReservation = userIDs.includes(id)
       }
 
@@ -185,16 +187,17 @@ export default {
     },
 
     editItem(item) {
-      this.$refs.tipDialog
+      this.$refs.instructionDialog
           .open({
             title: '預約注意事項',
             msg: instruction
-          },{ width: 800 })
+          }, {width: 800})
           .then(agree => {
             if (agree)
               this.reserve(item)
           })
-          .catch(() => {})
+          .catch(() => {
+          })
     },
 
     reserve(item) {
@@ -255,6 +258,25 @@ export default {
           }
       )
     },
+    showReservation(reservation) {
+      this.$refs
+          .tipDialog
+          .open({
+            title: `${reservation.user.empid}-${reservation.user.nameTW} 的預約資訊`,
+            msg: this.getReservationInfo(reservation)
+          })
+          .then(Function)
+          .catch(Function)
+    },
+    getReservationInfo(reservation) {
+return `
+<ul>
+    <li>書名：${reservation.book.name}</li>
+    <li>申請時間：${reservation.applyDate}</li>
+    <li>預約時段: ${reservation.reservationDate}~${reservation.dueDate}</li>
+</ul>
+`
+    }
   }
 }
 </script>

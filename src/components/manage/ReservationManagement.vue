@@ -4,8 +4,8 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :sort-by="['statusDisplay', 'applyDate']"
-        :sort-desc="[true, true]"
+        :sort-by="['statusDisplay', 'applyDate', 'reservationDate']"
+        :sort-desc="[true, true, false]"
         class="elevation-1"
         multi-sort
     >
