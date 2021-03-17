@@ -3,7 +3,10 @@
     <v-data-table
         :headers="headers"
         :items="items"
-        sort-by="tech"
+        :sort-by="['applyDate']"
+        :sort-desc="true"
+        :search="search"
+        multi-sort
         show-expand
         class="elevation-1"
     >
@@ -23,14 +26,6 @@
           </v-icon>
           取消
         </v-btn>
-      </template>
-
-      <template v-slot:item.status="{ item }">
-        {{ reservationStatus[item.status] }}
-      </template>
-
-      <template v-slot:item.bookName="{ item }">
-        {{ item.book.name }}
       </template>
 
       <template v-slot:expanded-item="{headers, item}">
@@ -54,17 +49,10 @@
       </template>
 
       <template v-slot:top>
-        <v-toolbar
-            flat
-        >
-          <v-toolbar-title>我的預約</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
-          <v-spacer></v-spacer>
-        </v-toolbar>
+        <simple-tool-bar
+          title="我的預約"
+          v-model="search"
+        ></simple-tool-bar>
       </template>
     </v-data-table>
 
@@ -78,28 +66,30 @@ import {Reservation, reservationStatus} from '@/model/reservation'
 import {User} from '@/model/user'
 import Msg from '@/services/msg'
 import SimpleDialog from '@/components/core/SimpleDialog'
+import SimpleToolBar from '@/components/core/SimpleToolBar'
 
 export default {
   name: "MyReservation",
   data: () => ({
+    search: '',
     headers: [
       {text: '操作', value: 'actions', sortable: false},
-      {text: '狀態', value: 'status'},
-      {text: '書刊名', value: 'bookName'},
+      {text: '狀態', value: 'statusDisplay'},
+      {text: '書刊名', value: 'book.name'},
       {text: '申請時間', value: 'applyDate'},
       {text: '預約起日', value: 'reservationDate'},
       {text: '到期時間', value: 'dueDate'},
       {text: '審核時間', value: 'verifyDate'},
       {text: '取書時間', value: 'takeDate'},
       {text: '歸還時間', value: 'returnDate'},
-      {text: '流程圖', value: 'data-table-expand'}
+      {text: '流程圖', value: 'data-table-expand', filterable: false}
     ],
     items: [],
     user: new User(),
     isLoaded: false,
     reservationStatus: reservationStatus
   }),
-  components: {SimpleDialog},
+  components: {SimpleDialog, SimpleToolBar},
   created() {
     this.user = this.$store.state.user
     this.initialize()
@@ -110,6 +100,9 @@ export default {
       ReservationService.getAllByUserID(this.user.id)
           .then(data => {
             this.items = data
+            this.items.forEach(item => {
+              item.statusDisplay = this.reservationStatus[item.status]
+            })
             this.configureStep()
             this.isLoaded = true
           })
@@ -227,10 +220,12 @@ export default {
     subscribe() {
       ReservationService.subscribe(
           reservation => {
+            reservation.statusDisplay = this.reservationStatus[reservation.status]
             this.items.push(reservation)
             this.createSteps(reservation)
           },
           reservation => {
+            reservation.statusDisplay = this.reservationStatus[reservation.status]
             let index = this.items.findIndex(item => item.id === reservation.id)
             let target = this.items[index]
             Object.assign(target, reservation)
