@@ -3,8 +3,11 @@
     <v-data-table
         :headers="headers"
         :items="items"
-        sort-by="tech"
+        :sort-by="['createDate', 'name']"
+        :sort-desc="[true, false]"
         class="elevation-1"
+        :search="search"
+        multi-sort
     >
       <template v-slot:top>
         <v-toolbar
@@ -16,7 +19,13 @@
               inset
               vertical
           ></v-divider>
-          <v-spacer></v-spacer>
+          <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+          ></v-text-field>
         </v-toolbar>
       </template>
       <template v-slot:item.statusDisplay="{ item }">
@@ -89,8 +98,10 @@ export default {
   name: 'LibraryInfo',
   components: {ReservationForm, SimpleDialog},
   data: () => ({
+    search: '',
     headers: [
-      {text: '操作', value: 'actions', sortable: false},
+      {text: '操作', value: 'actions', sortable: false, filterable: false},
+      {text: '入庫時間', value: 'createDate'},
       {text: '書刊名', value: 'name'},
       {text: '作者', value: 'author'},
       {text: '技術', value: 'tech'},
