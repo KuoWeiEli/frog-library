@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import {Reservation, reservationStatus, reservationStatusStep} from '@/model/reservation'
+import {Reservation, reservationStatus, reservationStatusStep, isPendding} from '@/model/reservation'
 import ReservationService from '@/services/aws/reservation'
 import Msg from '@/services/msg'
 import format from '@/services/format'
@@ -168,7 +168,7 @@ export default {
             this.items = data
             this.items.forEach(e => {
               // 只能在待審核、待取書、待歸還的狀態下編輯預約資訊
-              e.editable = /[234]/.test(e.status)
+              e.editable = isPendding(e.status)
             })
           })
     },
@@ -176,9 +176,12 @@ export default {
     subscribe() {
       ReservationService.subscribe(
           reservation => {
+            reservation.editable = isPendding(reservation.status)
             this.items.push(reservation)
+
           },
           reservation => {
+            reservation.editable = isPendding(reservation.status)
             let index = this.items.findIndex(item => item.id === reservation.id)
             let target = this.items[index]
             Object.assign(target, reservation)
