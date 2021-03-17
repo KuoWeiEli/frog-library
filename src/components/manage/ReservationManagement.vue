@@ -4,9 +4,10 @@
         :headers="headers"
         :items="items"
         :search="search"
-        :sort-by="['status', 'applyDate']"
-        :sort-desc="[false, true]"
+        :sort-by="['statusDisplay', 'applyDate']"
+        :sort-desc="[true, true]"
         class="elevation-1"
+        multi-sort
     >
       <template v-slot:top>
         <simple-tool-bar
