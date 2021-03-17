@@ -3,7 +3,7 @@ const format = {
         if (!date) return null
 
         const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
+        return `${year}/${month}/${day}`
     },
     /** yyyy-MM-dd **/
     toDateStr(date) {
