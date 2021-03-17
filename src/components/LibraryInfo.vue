@@ -10,23 +10,10 @@
         multi-sort
     >
       <template v-slot:top>
-        <v-toolbar
-            flat
-        >
-          <v-toolbar-title>館藏資訊</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
-          <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-          ></v-text-field>
-        </v-toolbar>
+        <simple-tool-bar
+          title="館藏資訊"
+          v-model="search"
+        ></simple-tool-bar>
       </template>
       <template v-slot:item.statusDisplay="{ item }">
         <!-- 破損或遺失皆不可借閱-->
@@ -93,10 +80,11 @@ import ReservationForm from '@/components/form/ReservationForm'
 import SimpleDialog from '@/components/core/SimpleDialog'
 import {Reservation, isPendding} from '@/model/reservation'
 import instruction from '@/assets/doc/reservation_instructions'
+import SimpleToolBar from '@/components/core/SimpleToolBar'
 
 export default {
   name: 'LibraryInfo',
-  components: {ReservationForm, SimpleDialog},
+  components: {ReservationForm, SimpleDialog, SimpleToolBar},
   data: () => ({
     search: '',
     headers: [
