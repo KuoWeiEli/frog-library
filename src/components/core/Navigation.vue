@@ -98,8 +98,7 @@ export default {
       if (this.$store.state.user.id) {
         items.push({title: '我的預約', icon: 'mdi-account-clock', url: '/my-reservation'},
             {title: '預約管理', icon: 'mdi-book-account', url: '/reservation-management'},
-            {title: '書庫管理', icon: 'mdi-book-cog', url: '/book-management'},
-            {title: '員工管理', icon: 'mdi-account-group', url: '/user-management'})
+            {title: '書庫管理', icon: 'mdi-book-cog', url: '/book-management'})
       }
       return items
     }
