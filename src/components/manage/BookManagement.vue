@@ -3,38 +3,36 @@
     <v-data-table
         :headers="headers"
         :items="items"
-        sort-by="createDate"
-        :sort-desc="true"
+        :search="search"
+        :sort-by="['createDate', 'name']"
+        :sort-desc="[true, false]"
         class="elevation-1"
+        multi-sort
     >
       <template v-slot:top>
-        <v-toolbar
-            flat
+        <simple-tool-bar
+          title="書庫管理"
+          v-model="search"
         >
-          <v-toolbar-title>書庫管理</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
-          <v-spacer></v-spacer>
-          <basic-dialog :dialog="dialog">
-            <basic-card :title="dialogTitle" :loading="isCardLoading" :disabled="isCardDisabled" @save="save"
-                        @close="close">
-              <book-form ref="form" :edited-item="editedItem" @coverUpload="coverUpload"/>
-              <template v-slot:prepend>
-                <v-avatar
-                    v-if="cover"
-                    class="ma-3"
-                    size="400"
-                    tile
-                >
-                  <v-img contain :src="cover" @load="coverLoaded"></v-img>
-                </v-avatar>
-              </template>
-            </basic-card>
-          </basic-dialog>
-        </v-toolbar>
+          <template v-slot:append>
+            <basic-dialog :dialog="dialog">
+              <basic-card :title="dialogTitle" :loading="isCardLoading" :disabled="isCardDisabled" @save="save"
+                          @close="close">
+                <book-form ref="form" :edited-item="editedItem" @coverUpload="coverUpload"/>
+                <template v-slot:prepend>
+                  <v-avatar
+                      v-if="cover"
+                      class="ma-3"
+                      size="400"
+                      tile
+                  >
+                    <v-img contain :src="cover" @load="coverLoaded"></v-img>
+                  </v-avatar>
+                </template>
+              </basic-card>
+            </basic-dialog>
+          </template>
+        </simple-tool-bar>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn
@@ -75,13 +73,15 @@ import bookService from '@/services/aws/book'
 import BasicDialog from '@/components/core/BasicDialog'
 import BookForm from '@/components/book/BookForm'
 import BasicCard from '@/components/core/BasicCard'
+import SimpleToolBar from '@/components/core/SimpleToolBar'
 
 export default {
   name: 'BookManagement',
-  components: {BasicDialog, BookForm, BasicCard},
+  components: {BasicDialog, BookForm, BasicCard, SimpleToolBar},
   data: () => ({
+    search: '',
     headers: [
-      {text: '操作', value: 'actions', sortable: false},
+      {text: '操作', value: 'actions', sortable: false, filterable: false},
       {text: '書刊名', value: 'name'},
       {text: '作者', value: 'author'},
       {text: '技術', value: 'tech'},
