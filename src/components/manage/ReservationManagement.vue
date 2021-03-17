@@ -56,8 +56,9 @@
           {{ item.editable ? '編輯' : '查看' }}
         </v-btn>
         <v-spacer></v-spacer>
+        <!--當狀態為「待審核」、「待取書」時可以取消-->
         <v-btn
-            v-show="item.editable"
+            v-show="item.editable && item.status !== reservationStatusStep.STEP4"
             x-small
             text
             icon
