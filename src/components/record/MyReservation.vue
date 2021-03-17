@@ -18,7 +18,7 @@
             text
             icon
             class="mr-2"
-            color="primary"
+            color="warning"
             @click="cancel(item)"
         >
           <v-icon small>
@@ -204,17 +204,9 @@ export default {
           })
           .then(agree => {
             if (agree)
-              this.cancelReservation(item)
+              ReservationService.cancelReservation(Object.assign(new Reservation(), item))
           })
           .catch(() => {})
-    },
-    cancelReservation(item) {
-      let reservation = Object.assign(new Reservation(), item)
-      reservation.status = 'C'
-
-      ReservationService.updateReservation(reservation)
-          .then(() => Msg.success(Msg.i18N.success_reservation_cancel))
-          .catch(err => Msg.error(Msg.i18N.err_reservation_cancel, err))
     },
 
     subscribe() {

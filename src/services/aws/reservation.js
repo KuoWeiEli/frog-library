@@ -1,5 +1,6 @@
 import {Reservation} from '@/model/reservation'
 import * as db from '@/services/aws/db'
+import Msg from '@/services/msg'
 
 const reservationConverter = function (reservation) {
     return new Reservation(
@@ -71,6 +72,14 @@ const reservationService = {
             db.subscriptions('onUpdateReservation', (eventData) => onUpdateFn(eventData.value.data.onUpdateReservation))
         if (typeof onDeleteFn === 'function')
             db.subscriptions('onDeleteReservation', (eventData) => onDeleteFn(eventData.value.data.onDeleteReservation))
+    },
+
+    cancelReservation(reservation) {
+        reservation.status = 'C'
+
+        this.updateReservation(reservation)
+            .then(() => Msg.success(Msg.i18N.success_reservation_cancel))
+            .catch(err => Msg.error(Msg.i18N.err_reservation_cancel, err))
     }
 }
 

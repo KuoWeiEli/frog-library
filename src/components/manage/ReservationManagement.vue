@@ -18,7 +18,7 @@
       <template v-slot:item.actions="{ item }">
         <!-- 只有狀態在「待審核」的情況下，有「核可」與「拒絕」選項，其餘為「查看」與「編輯」選項 -->
         <v-btn
-            v-show="item.status === '2'"
+            v-show="item.status === reservationStatusStep.STEP2"
             x-small
             text
             icon
@@ -30,7 +30,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
-            v-show="item.status === '2'"
+            v-show="item.status === reservationStatusStep.STEP2"
             x-small
             text
             icon
@@ -42,7 +42,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
-            v-show="item.status !== '2'"
+            v-show="item.status !== reservationStatusStep.STEP2"
             x-small
             text
             icon
@@ -54,6 +54,21 @@
             {{ item.editable ? 'mdi-lead-pencil' : 'mdi-magnify' }}
           </v-icon>
           {{ item.editable ? '編輯' : '查看' }}
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+            v-show="item.editable"
+            x-small
+            text
+            icon
+            class="mr-2"
+            color="warning"
+            @click="cancel(item)"
+        >
+          <v-icon small>
+            mdi-cancel
+          </v-icon>
+          取消
         </v-btn>
       </template>
     </v-data-table>
@@ -104,6 +119,7 @@ export default {
     items: [],
     editedItem: new Reservation(),
     reservationStatusMap: reservationStatus,
+    reservationStatusStep: reservationStatusStep
   }),
 
   created() {
@@ -164,6 +180,10 @@ export default {
             let index = this.items.findIndex(item => item.id === reservation.id)
             this.items.splice(index, 1)
           })
+    },
+
+    cancel(item) {
+      ReservationService.cancelReservation(Object.assign(new Reservation(), item))
     }
   }
 }
