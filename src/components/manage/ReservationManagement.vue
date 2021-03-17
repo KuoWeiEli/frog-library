@@ -3,49 +3,16 @@
     <v-data-table
         :headers="headers"
         :items="items"
-        sort-by="applyDate"
-        :sort-desc="true"
+        :search="search"
+        :sort-by="['status', 'applyDate']"
+        :sort-desc="[false, true]"
         class="elevation-1"
     >
       <template v-slot:top>
-        <v-toolbar
-            flat
-        >
-          <v-toolbar-title>預約管理</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
-          <v-spacer></v-spacer>
-          <!--          <v-dialog-->
-          <!--              v-model="dialog"-->
-          <!--              max-width="500px"-->
-          <!--          >-->
-          <!--            <template v-slot:activator="{ on, attrs }">-->
-          <!--              <v-btn-->
-          <!--                  color="primary"-->
-          <!--                  dark-->
-          <!--                  class="mb-2"-->
-          <!--                  v-bind="attrs"-->
-          <!--                  v-on="on"-->
-          <!--              >-->
-          <!--                New Reservation-->
-          <!--              </v-btn>-->
-          <!--            </template>-->
-
-
-          <!--          </v-dialog>-->
-        </v-toolbar>
-      </template>
-      <template v-slot:item.bookName="{ item }">
-        {{ item.book.name }}
-      </template>
-      <template v-slot:item.statusDisplay="{ item }">
-        {{ reservationStatusMap[item.status] }}
-      </template>
-      <template v-slot:item.applicant="{ item }">
-        {{ item.user.empid + '-' + item.user.nameTW }}
+        <simple-tool-bar
+          title="預約管理"
+          v-model="search"
+        ></simple-tool-bar>
       </template>
       <template v-slot:item.actions="{ item }">
         <!-- 只有狀態在「待審核」的情況下，有「核可」與「拒絕」選項，其餘為「查看」與「編輯」選項 -->
@@ -114,17 +81,19 @@ import Msg from '@/services/msg'
 import format from '@/services/format'
 import SimpleDialog from '@/components/core/SimpleDialog'
 import ReservationForm from '@/components/form/ReservationForm'
+import SimpleToolBar from '@/components/core/SimpleToolBar'
 
 export default {
   name: 'ReservationManagement',
-  components: {SimpleDialog, ReservationForm},
+  components: {SimpleDialog, ReservationForm, SimpleToolBar},
   data: () => ({
+    search: '',
     headers: [
       {text: '操作', value: 'actions', sortable: false},
       {text: '預約狀態', value: 'statusDisplay'},
       {text: '申請人', value: 'applicant'},
       {text: '申請時間', value: 'applyDate'},
-      {text: '書刊名', value: 'bookName'},
+      {text: '書刊名', value: 'book.name'},
       {text: '預約起日', value: 'reservationDate'},
       {text: '到期時間', value: 'dueDate'},
       {text: '審核時間', value: 'verifyDate'},
@@ -164,24 +133,28 @@ export default {
     initialize: function () {
       ReservationService.getAll()
           .then(data => {
-            console.log(data)
             this.items = data
-            this.items.forEach(e => {
-              // 只能在待審核、待取書、待歸還的狀態下編輯預約資訊
-              e.editable = isPendding(e.status)
-            })
+            this.items.forEach(this.attachDisplayAttrToReservation)
           })
+    },
+
+    /** 為指定預約添加顯示用屬性 **/
+    attachDisplayAttrToReservation(reservation) {
+      // 只能在待審核、待取書、待歸還的狀態下編輯預約資訊
+      reservation.editable = isPendding(reservation.status)
+      reservation.statusDisplay = this.reservationStatusMap[reservation.status]
+      reservation.applicant = reservation.user.empid + '-' + reservation.user.nameTW
     },
 
     subscribe() {
       ReservationService.subscribe(
           reservation => {
-            reservation.editable = isPendding(reservation.status)
+            this.attachDisplayAttrToReservation(reservation)
             this.items.push(reservation)
 
           },
           reservation => {
-            reservation.editable = isPendding(reservation.status)
+            this.attachDisplayAttrToReservation(reservation)
             let index = this.items.findIndex(item => item.id === reservation.id)
             let target = this.items[index]
             Object.assign(target, reservation)

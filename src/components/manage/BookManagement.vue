@@ -15,6 +15,11 @@
           v-model="search"
         >
           <template v-slot:append>
+            <v-divider
+                class="mx-4"
+                inset
+                vertical
+            ></v-divider>
             <basic-dialog :dialog="dialog">
               <basic-card :title="dialogTitle" :loading="isCardLoading" :disabled="isCardDisabled" @save="save"
                           @close="close">

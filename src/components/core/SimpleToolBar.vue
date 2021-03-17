@@ -16,11 +16,6 @@
         single-line
         hide-details
     ></v-text-field>
-    <v-divider
-        class="mx-4"
-        inset
-        vertical
-    ></v-divider>
     <slot name="append"></slot>
   </v-toolbar>
 </template>
