@@ -69,6 +69,11 @@
         </v-btn>
       </template>
     </v-data-table>
+
+    <simple-dialog
+        ref="tipDialog"
+        persistent
+    ></simple-dialog>
   </div>
 </template>
 
@@ -79,10 +84,12 @@ import BasicDialog from '@/components/core/BasicDialog'
 import BookForm from '@/components/book/BookForm'
 import BasicCard from '@/components/core/BasicCard'
 import SimpleToolBar from '@/components/core/SimpleToolBar'
+import Msg from '@/services/msg'
+import SimpleDialog from '@/components/core/SimpleDialog'
 
 export default {
   name: 'BookManagement',
-  components: {BasicDialog, BookForm, BasicCard, SimpleToolBar},
+  components: {BasicDialog, BookForm, BasicCard, SimpleToolBar, SimpleDialog},
   data: () => ({
     search: '',
     headers: [
@@ -214,16 +221,22 @@ export default {
           })
     },
     removeItem(item) {
-      this.$confirm(`Do you want to remove the book,【${item.name}】?`)
-          .then(() => {
-            bookService.deleteBook(item.id)
-                .then(() => this.$message({
-                  type: 'success', message: `Successfully delete book, 【${item.name}】`
-                }))
-                .catch(err => this.$message({
-                  type: 'error', message: `delete book【${item.name} failed, error: ${err}】`
-                }))
+      this.$refs
+          .tipDialog
+          .open({
+            title: `刪除提醒`,
+            msg: `你確定要刪除【${item.name}】這本書？`
           })
+          .then(agree => {
+            if (agree)
+              this.deleteBook(item.id)
+          })
+          .catch(Function)
+    },
+    deleteBook(bookID) {
+      bookService.deleteBook(bookID)
+          .then(() => Msg.success(Msg.i18N.success_delete))
+          .catch(err => Msg.error(Msg.i18N.err_delete, err))
     }
   }
 }

@@ -16,6 +16,7 @@ const Msg = {
         err_query: '查詢發生錯誤，請洽系統管理員！',
         err_update: '更新發生錯誤，請洽系統管理員！',
         err_delete: '刪除發生錯誤，請洽系統管理員！',
+        success_delete: '成功刪除！',
         err_app_user: '初始化使用者資訊發生錯誤，請洽系統管理員！',
         success_sign_out: '已成功登出！',
         err_sign_out: '登出發生錯誤！請洽系統管理員！',
