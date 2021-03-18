@@ -28,6 +28,7 @@ type Reservation
   @model
   @key(name: "reservationByUser", fields: ["userID", "applyDate"])
   @key(name: "reservationByBook", fields: ["bookID", "applyDate"])
+  @key(name: "reservationByStatus", fields: ["status"])
 {
   id: ID!
   applyDate: String!
