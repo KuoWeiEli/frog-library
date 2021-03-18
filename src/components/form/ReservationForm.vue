@@ -268,14 +268,6 @@ export default {
     },
     valid: true,
     form: new Reservation(),
-    rules: {
-      book: [v => !!v || '必須指定預約書籍！'],
-      user: [v => !!v || '無使用者資訊！'],
-      reservation: [
-        v => !!v || '請選擇預約時間！',
-        v => !v || v.includes('~') || '無完整預約時段！請選擇預約「起日」與「訖日」兩個日期！'
-      ]
-    },
     card: {
       loading: false,
       disabled: false
@@ -302,6 +294,18 @@ export default {
 
   },
   computed: {
+    rules() {
+      return {
+        book: [v => !!v || '必須指定預約書籍！'],
+        user: [v => !!v || '無使用者資訊！'],
+        reservation: [
+          v => !!v || '請選擇預約時間！',
+          v => !v || v.includes('~') || '無完整預約時段！請選擇預約「起日」與「訖日」兩個日期！',
+          v => !v || !v.includes('~') || this.calendar.reservationDate[1] >= (this.form.takeDate || this.form.verifyDate) || '預約訖日必須大於等於審核或是取書時間！'
+        ]
+      }
+    },
+
     reservationMaxDate() {
       if (this.calendar.reservationDate.length > 0) {
         let [start] = this.calendar.reservationDate
@@ -352,10 +356,10 @@ export default {
   methods: {
     /** 選擇的預約日期不可以在預約佇列的預約時段中 **/
     allowReservationDates(val) {
-      let queue = this.form.book.reservations
+      let queue = this.form.book.reservationQueue
       return !queue || queue.filter(r => {
         // 日期在預約時段中
-        return !(val > r.reservationDate && val < r.dueDate)
+        return !(val >= r.reservationDate && val <= r.dueDate)
       }).length
     },
 

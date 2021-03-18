@@ -58,7 +58,7 @@
         <v-spacer></v-spacer>
         <!--當狀態為「待審核」、「待取書」時可以取消-->
         <v-btn
-            v-show="item.editable && item.status !== reservationStatusStep.STEP4"
+            v-show="item.editable && item.status !== reservationStatusStep.STEP4 && item.status !== reservationStatusStep.TIMEOUT"
             x-small
             text
             icon
@@ -158,7 +158,7 @@ export default {
 
     /** 為指定預約添加顯示用屬性 **/
     attachDisplayAttrToReservation(reservation) {
-      // 只能在待審核、待取書、待歸還的狀態下編輯預約資訊
+      // 只能在待審核、待取書、待歸還、已逾時的狀態下編輯預約資訊
       reservation.editable = isPendding(reservation.status)
       reservation.statusDisplay = this.reservationStatusMap[reservation.status]
       reservation.applicant = reservation.user.empid + '-' + reservation.user.nameTW

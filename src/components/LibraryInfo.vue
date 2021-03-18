@@ -21,11 +21,11 @@
       </template>
 
       <template v-slot:item.waitNum="{ item }">
-        {{ item.reservations ? item.reservations.length : 0 }}
+        {{ item.reservationQueue ? item.reservationQueue.length : 0 }}
       </template>
       <template v-slot:item.waitQueue="{ item }">
         <v-chip
-            v-for="reservation in item.reservations"
+            v-for="reservation in item.reservationQueue"
             :key="reservation.id"
             @click="showReservation(reservation)"
         >
@@ -109,7 +109,7 @@ export default {
       let id = this.$store.state.user.id
       let hasReservation = false
       if (this.items) {
-        let userIDs = this.items.map(each => each.reservations)
+        let userIDs = this.items.map(each => each.reservationQueue)
             .reduce((a, b) => a.concat(b), [])
             .filter(Boolean)
             .map(reservation => reservation.userID)
@@ -131,7 +131,7 @@ export default {
       let userAvatarMap = {}
 
       reservations.forEach(each => {
-        // 等待佇列只包含預約狀態為「待審核」、「待取書」、「待歸還」
+        // 等待佇列只包含預約狀態為「待審核」、「待取書」、「待歸還」、「已逾時」
         if (isPendding(each.status)) {
           // 將 reservations 集合變成 Map<BookID, Reservations> 的形式
           let bookID = each.bookID
@@ -171,10 +171,10 @@ export default {
                   this.items = books
                   this.items.forEach(book => {
                     // 依照 bookReservationMap 取得該 book 的預約陣列
-                    book.reservations = bookReservationMap[book.id]
+                    book.reservationQueue = bookReservationMap[book.id]
                     // 如果該書有預約紀錄，依照 userAvatarMap 取得該 user 的大頭貼 Url
-                    if (book.reservations)
-                      book.reservations
+                    if (book.reservationQueue)
+                      book.reservationQueue
                           .forEach(each => {
                             each.user.userAvatar = userAvatarMap[each.userID]
                           })
@@ -238,9 +238,9 @@ export default {
                   reservation.user.userAvatar = url
 
                   let book = this.getBook(reservation.bookID)
-                  if (!book.reservations)
-                    book.reservations = []
-                  book.reservations.push(reservation)
+                  if (!book.reservationQueue)
+                    book.reservationQueue = []
+                  book.reservationQueue.push(reservation)
                 })
                 .catch(err => {
                   Msg.error(Msg.i18N.err_query, err)
@@ -248,13 +248,13 @@ export default {
           },
           reservation => {
             let book = this.getBook(reservation.bookID)
-            let reservationIndex = book.reservations.findIndex(item => item.id === reservation.id)
-            Object.assign(book.reservations[reservationIndex], reservation)
+            let reservationIndex = book.reservationQueue.findIndex(item => item.id === reservation.id)
+            Object.assign(book.reservationQueue[reservationIndex], reservation)
           },
           reservation => {
             let book = this.getBook(reservation.bookID);
-            let reservationIndex = book.reservations.findIndex(item => item.id === reservation.id)
-            book.reservations.splice(reservationIndex, 1)
+            let reservationIndex = book.reservationQueue.findIndex(item => item.id === reservation.id)
+            book.reservationQueue.splice(reservationIndex, 1)
           }
       )
     },

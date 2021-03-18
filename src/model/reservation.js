@@ -35,9 +35,9 @@ const reservationStatusStep = {
     STEP4: '4'
 }
 
-/** 是否為等待狀態：STEP2~4 **/
+/** 是否為等待狀態：STEP2~4、TIMEOUT **/
 function isPendding(status) {
-    return /[234]/.test(status)
+    return /[234T]/.test(status)
 }
 
 export {Reservation, reservationStatus, reservationStatusStep, isPendding}
