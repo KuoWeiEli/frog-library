@@ -76,6 +76,7 @@ import BookService from '@/services/aws/book'
 import ReservationService from '@/services/aws/reservation'
 import UserService from '@/services/aws/user'
 import {Book, bookCurrStatus} from '@/model/book'
+import {reservationStatus} from '@/model/reservation'
 import {User} from '@/model/user'
 import Msg from '@/services/msg'
 import ReservationForm from '@/components/form/ReservationForm'
@@ -273,7 +274,8 @@ return `
 <ul>
     <li>書名：${reservation.book.name}</li>
     <li>申請時間：${reservation.applyDate}</li>
-    <li>預約時段: ${reservation.reservationDate}~${reservation.dueDate}</li>
+    <li>預約時段： ${reservation.reservationDate}~${reservation.dueDate}</li>
+    <li>狀態：${reservationStatus[reservation.status]}</li>
 </ul>
 `
     }
