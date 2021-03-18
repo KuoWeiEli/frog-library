@@ -119,14 +119,14 @@ export default {
     initialize() {
       BookService.getAll()
           .then(data => {
+            data.forEach(this.attachDisplayAttrToBook)
             this.items = data
-            this.items
-                .forEach(item => {
-                  item.statusDisplay = this.bookStatus[item.status]
-                }
-            )
           })
           .catch(err => Msg.error(Msg.i18N.err_query, err))
+    },
+
+    attachDisplayAttrToBook(book) {
+      book.statusDisplay = this.bookStatus[book.status]
     },
 
     editItem(item) {
@@ -138,8 +138,12 @@ export default {
     },
     subscribe() {
       BookService.subscribe(
-          book => this.items.push(book),
           book => {
+            this.attachDisplayAttrToBook(book)
+            this.items.push(book)
+          },
+          book => {
+            this.attachDisplayAttrToBook(book)
             let index = this.items.findIndex(item => item.id === book.id)
             Object.assign(this.items[index], book)
           },

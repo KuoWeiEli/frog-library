@@ -8,15 +8,11 @@
     </v-card-title>
 
     <div class="d-sm-flex flex-sm-nowrap justify-sm-space-between">
-      <v-avatar
-          v-if="coverAvatar"
-          class="ma-3"
-          size="400"
-          tile
-      >
-        <v-img contain :src="coverAvatar" @load="coverLoaded"></v-img>
-      </v-avatar>
-
+      <v-img
+          v-if="coverImg"
+          contain :src="coverImg"
+          @load="coverLoaded"
+      ></v-img>
       <div>
         <v-card-text>
           <v-container>
@@ -25,6 +21,7 @@
                 @submit.prevent="save"
                 v-model="valid"
                 lazy-validation
+                :readonly="!isManageMode"
             >
               <v-row>
                 <v-col
@@ -78,6 +75,7 @@
                       offset-y
                       max-width="290px"
                       min-width="290px"
+                      :disabled="!isManageMode"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
@@ -124,6 +122,7 @@
                       offset-y
                       max-width="290px"
                       min-width="290px"
+                      :disabled="!isManageMode"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
@@ -143,6 +142,7 @@
                   </v-menu>
                 </v-col>
                 <v-col
+                    v-show="isManageMode"
                     cols="12"
                 >
                   <img-file
@@ -165,7 +165,7 @@
         </v-card-text>
       </div>
     </div>
-    <v-card-actions>
+    <v-card-actions v-show="isManageMode">
       <v-spacer></v-spacer>
 
       <slot name="action">
@@ -230,7 +230,7 @@ export default {
       loading: false,
       disabled: false
     },
-    coverAvatar: null,
+    coverImg: null,
   }),
   created() {
     Object.assign(this.form, this.book)
@@ -240,7 +240,7 @@ export default {
 
   computed: {
     cardTitle() {
-      return !this.isManageMode? 'Book Detail': this.form.id? 'Edit Book': 'Add Book'
+      return !this.isManageMode ? 'Book Detail' : this.form.id ? 'Edit Book' : 'Add Book'
     },
 
     publishDateFormatted() {
@@ -274,7 +274,7 @@ export default {
       // coverChanged 初始值為 false，一旦經過上傳，將會變為 true
       this.form.coverChanged = true
       this.card.loading = true
-      this.coverAvatar = imgFileUrl
+      this.coverImg = imgFileUrl
     },
 
     coverLoaded() {
@@ -309,7 +309,7 @@ export default {
       this.card.loading = true
       // book cover in s3 use the bookID as the file key
       BookService.getBookCover(this.form.id)
-          .then(url => this.coverAvatar = url)
+          .then(url => this.coverImg = url)
           .catch(err => Msg.error(Msg.i18N.err_book_cover_load, err))
     }
   }

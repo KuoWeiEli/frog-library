@@ -59,6 +59,7 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  :disabled="isReadonly"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -113,6 +114,7 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  :disabled="isReadonly"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -147,6 +149,7 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  :disabled="isReadonly"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -181,7 +184,7 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
-                  :disabled="!form.takeDate"
+                  :disabled="isReadonly || !form.takeDate"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -277,8 +280,6 @@ export default {
     Object.assign(this.form, this.reservation)
 
     if (this.isManageMode) {
-      // 查看預約時，不可更改任何欄位
-      this.card.disabled = !this.reservation.editable
       this.calendar.reservationDate = [this.reservation.reservationDate, this.reservation.dueDate]
       // 因為申請日一開始就有，所以可以在這裡設置 MinDate，其餘需要使用 Computed Function
       // 預約日期不可在使用者申請日之前
@@ -294,6 +295,11 @@ export default {
 
   },
   computed: {
+    // 查看預約時，不可更改任何欄位
+    isReadonly() {
+      return this.isManageMode && !this.reservation.editable
+    },
+
     rules() {
       return {
         book: [v => !!v || '必須指定預約書籍！'],

@@ -37,6 +37,19 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn
+            x-small
+            text
+            icon
+            class="mr-2"
+            color="primary"
+            @click="showBook(item)"
+        >
+          <v-icon small>
+            mdi-magnify
+          </v-icon>
+          查看
+        </v-btn>
+        <v-btn
             v-show="enabledReservation"
             x-small
             text
@@ -68,6 +81,18 @@
 
     <simple-dialog ref="instructionDialog" persistent></simple-dialog>
     <simple-dialog ref="tipDialog"></simple-dialog>
+    <simple-dialog
+        ref="bookDialog"
+    >
+      <template
+          v-slot:default="{ dialog }"
+      >
+        <book-form
+            v-if="dialog"
+            :book="peekBook"
+        ></book-form>
+      </template>
+    </simple-dialog>
   </div>
 </template>
 
@@ -84,10 +109,11 @@ import SimpleDialog from '@/components/core/SimpleDialog'
 import {Reservation, isPendding} from '@/model/reservation'
 import instruction from '@/assets/doc/reservation_instructions'
 import SimpleToolBar from '@/components/core/SimpleToolBar'
+import BookForm from '@/components/book/BookForm'
 
 export default {
   name: 'LibraryInfo',
-  components: {ReservationForm, SimpleDialog, SimpleToolBar},
+  components: {ReservationForm, SimpleDialog, SimpleToolBar, BookForm},
   data: () => ({
     search: '',
     headers: [
@@ -102,6 +128,7 @@ export default {
     ],
     items: [],
     editedItem: new Reservation(),
+    peekBook: new Book(),
     bookCurrStatus: bookCurrStatus
   }),
   computed: {
@@ -270,7 +297,7 @@ export default {
           .catch(Function)
     },
     getReservationInfo(reservation) {
-return `
+      return `
 <ul>
     <li>書名：${reservation.book.name}</li>
     <li>申請時間：${reservation.applyDate}</li>
@@ -278,6 +305,13 @@ return `
     <li>狀態：${reservationStatus[reservation.status]}</li>
 </ul>
 `
+    },
+    showBook(book) {
+      this.peekBook = Object.assign(new Book(), book)
+      this.$refs.bookDialog
+          .open({}, {width: 1000})
+          .then(Function)
+          .catch(Function)
     }
   }
 }
