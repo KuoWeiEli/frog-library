@@ -22,7 +22,11 @@ const Msg = {
         err_sign_out: '登出發生錯誤！請洽系統管理員！',
 
         success_reservation_verified: '已完成審核！',
-        err_reservation_verified: '審核發生錯誤，請洽系統管理員！'
+        err_reservation_verified: '審核發生錯誤，請洽系統管理員！',
+
+        success_book_save: '儲存書籍資訊成功！',
+        err_book_save: '儲存書籍發生錯誤，請洽系統管理員！',
+        err_book_cover_load: '讀取書籍封面發生錯誤，請洽系統管理員！'
     },
     showMsg(type, msg) {
         let i18nMessage = this.i18N[msg]? this.i18N[msg]: msg

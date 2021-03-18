@@ -20,22 +20,13 @@
                 inset
                 vertical
             ></v-divider>
-            <basic-dialog :dialog="dialog">
-              <basic-card :title="dialogTitle" :loading="isCardLoading" :disabled="isCardDisabled" @save="save"
-                          @close="close">
-                <book-form ref="form" :edited-item="editedItem" @coverUpload="coverUpload"/>
-                <template v-slot:prepend>
-                  <v-avatar
-                      v-if="cover"
-                      class="ma-3"
-                      size="400"
-                      tile
-                  >
-                    <v-img contain :src="cover" @load="coverLoaded"></v-img>
-                  </v-avatar>
-                </template>
-              </basic-card>
-            </basic-dialog>
+            <v-btn
+                color="primary"
+                class="mb-2"
+                @click="editItem({})"
+            >
+              New Book
+            </v-btn>
           </template>
         </simple-tool-bar>
       </template>
@@ -74,22 +65,34 @@
         ref="tipDialog"
         persistent
     ></simple-dialog>
+
+    <simple-dialog
+        ref="bookDialog"
+    >
+      <template
+          v-slot:default="{ dialog }"
+      >
+        <book-form
+            v-if="dialog"
+            :is-manage-mode="true"
+            :book="editedItem"
+        ></book-form>
+      </template>
+    </simple-dialog>
   </div>
 </template>
 
 <script>
 import {Book, bookStatus} from '@/model/book'
-import bookService from '@/services/aws/book'
-import BasicDialog from '@/components/core/BasicDialog'
-import BookForm from '@/components/book/BookForm'
-import BasicCard from '@/components/core/BasicCard'
+import BookService from '@/services/aws/book'
 import SimpleToolBar from '@/components/core/SimpleToolBar'
 import Msg from '@/services/msg'
 import SimpleDialog from '@/components/core/SimpleDialog'
+import BookForm from '@/components/book/BookForm'
 
 export default {
   name: 'BookManagement',
-  components: {BasicDialog, BookForm, BasicCard, SimpleToolBar, SimpleDialog},
+  components: {BookForm, SimpleToolBar, SimpleDialog},
   data: () => ({
     search: '',
     headers: [
@@ -104,24 +107,8 @@ export default {
     ],
     bookStatus: bookStatus,
     items: [],
-    editedIndex: -1,
     editedItem: new Book(),
-    dialog: {
-      visible: false,
-      maxWidth: '1000px',
-      activator: 'New Book'
-    },
-    cover: null,
-    // card prop
-    isCardLoading: false,
-    isCardDisabled: false
   }),
-
-  computed: {
-    dialogTitle() {
-      return this.editedIndex === -1 ? 'Add Book' : 'Edit Book'
-    }
-  },
 
   created() {
     this.initialize()
@@ -130,86 +117,27 @@ export default {
 
   methods: {
     initialize() {
-      bookService.getAll()
+      BookService.getAll()
           .then(data => {
             this.items = data
-            this.items.forEach(
-                item => {
+            this.items
+                .forEach(item => {
                   item.statusDisplay = this.bookStatus[item.status]
                 }
             )
           })
-          .catch(err => {
-            this.$message({type: 'error', message: `error happened:  ${err}`})
-          })
+          .catch(err => Msg.error(Msg.i18N.err_query, err))
     },
 
     editItem(item) {
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-
-      // 作為 cover 是否有變動的 flag
-      this.editedItem.coverChanged = false
-      this.isCardLoading = true
-      // book cover in s3 use the bookID as the file key
-      bookService.getBookCover(this.editedItem.id)
-          .then(url => {
-            this.cover = url
-          })
-          .catch(err => {
-            this.$message({type: 'error', message: `load book's cover happened error:  ${err}`})
-          })
-      this.dialog.visible = true
-    },
-
-    close() {
-      this.dialog.visible = false
-      this.$refs.form.$refs.bookForm.resetValidation()
-
-      this.$nextTick(() => {
-        this.editedItem = new Book()
-        this.editedIndex = -1
-        this.cover = null
-        this.isCardLoading = false
-        this.isCardDisabled = false
-      })
-    },
-
-    save() {
-      if (!this.$refs.form.$refs.bookForm.validate()) return
-
-      const isAdding = this.editedIndex === -1
-      const msg = isAdding ? 'adding' : 'updating'
-      const method = isAdding ? 'createBook' : 'updateBook'
-
-      this.isCardLoading = true
-      this.isCardDisabled = true
-
-      bookService[method](Object.assign({}, this.editedItem))
-          .then(() => {
-            this.$message({
-              type: 'success', message: `Success ${msg} book!`
-            })
-
-            this.close()
-          })
-          .catch(error => {
-            this.isCardLoading = false
-            this.isCardDisabled = false
-
-            this.$message({type: 'error', message: `Error ${msg} book: + ${error}`})
-          })
-    },
-    // cover upload 事件
-    coverUpload(event) {
-      this.isCardLoading = true
-      this.cover = event
-    },
-    coverLoaded() {
-      this.isCardLoading = false
+      this.editedItem = Object.assign(new Book(), item)
+      this.$refs.bookDialog
+          .open({}, { width: 1000 })
+          .then(Function)
+          .catch(Function)
     },
     subscribe() {
-      bookService.subscribe(
+      BookService.subscribe(
           book => this.items.push(book),
           book => {
             let index = this.items.findIndex(item => item.id === book.id)
@@ -234,7 +162,7 @@ export default {
           .catch(Function)
     },
     deleteBook(bookID) {
-      bookService.deleteBook(bookID)
+      BookService.deleteBook(bookID)
           .then(() => Msg.success(Msg.i18N.success_delete))
           .catch(err => Msg.error(Msg.i18N.err_delete, err))
     }
