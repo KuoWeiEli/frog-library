@@ -7,6 +7,8 @@
       <v-container>
         <router-view/>
       </v-container>
+
+      <app-footer></app-footer>
     </v-main>
   </v-app>
 </template>
@@ -20,10 +22,11 @@ import AuthService from '@/services/aws/auth'
 import UserService from '@/services/aws/user'
 import {User} from '@/model/user'
 import Msg from '@/services/msg'
+import AppFooter from '@/components/core/AppFooter'
 
 export default {
   name: 'App',
-  components: {AppBar, Navigation},
+  components: {AppBar, Navigation, AppFooter},
   created() {
     console.log('app.vue: created')
     // 在頁面載入時讀取 sessionStorage 裡的的狀態資訊

@@ -10,11 +10,12 @@
           class="shrink mr-2 hidden-sm-and-up"
       ></v-app-bar-nav-icon>
       <router-link to="/">
+
         <v-img
             alt="Frog-Jump Logo"
             class="shrink mr-2 hidden-sm-and-up"
             contain
-            src="https://www.frog-jump.com/resourse/icon/icon_intro.svg"
+            :src="require('../../assets/icon_intro.svg')"
             transition="scale-transition"
             width="40"
         />
@@ -23,7 +24,7 @@
             class="shrink mt-1 hidden-sm-and-down"
             contain
             min-width="250"
-            src="https://www.frog-jump.com/resourse/icon/logo_frog.svg"
+            :src="require('../../assets/logo_frog.svg')"
             transition="scale-transition"
             width="250"
         />
