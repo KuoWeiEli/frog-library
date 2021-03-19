@@ -1,5 +1,6 @@
 <template>
   <v-footer
+      v-bind="$attrs"
       padless
   >
     <v-card
@@ -35,7 +36,7 @@
             </v-btn>
           </v-card-text>
 
-          <v-card-text class="white--text pt-0">
+          <v-card-text class="white--text pt-0 shrink mt-1 hidden-sm-and-down">
             德義資訊是由一群擁有高品質的微軟、JAVA、AWS雲端技術的夥伴們組成，以專業品質提供企業用戶專業軟體服務。<br/>
             藉由專業人才及各種產業相關知識上深厚能力的緊密結合，德義充分協助了客戶縮短產品上市時間在關鍵任務及知識密集的系統上降低軟體開發過程中的風險。<br/>
             並且在「用心」、「專業」及「創新」的經營理念下，創造員工、客戶及公司的三方皆贏的永續經營。
@@ -43,7 +44,7 @@
 
           <v-divider></v-divider>
 
-          <v-card-text class="white--text">
+          <v-card-text class="white--text shrink mt-1 hidden-sm-and-down">
             {{ new Date().getFullYear() }} — <strong>版權所有 © 蛙尬藝股份有限公司</strong>
           </v-card-text>
         </div>
@@ -69,6 +70,3 @@ export default {
   name: "AppFooter",
 }
 </script>
-
-<style scoped>
-</style>

@@ -1,5 +1,6 @@
 <template>
   <v-app-bar
+      v-bind="$attrs"
       app
       dense
       clipped-left

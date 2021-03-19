@@ -1,14 +1,14 @@
 <template>
   <v-app>
-    <navigation :drawer="drawer"/>
-    <app-bar :drawer="drawer"/>
+    <navigation :drawer="drawer" app/>
+    <app-bar :drawer="drawer" app/>
 
-    <v-main>
+    <v-main app>
       <v-container>
         <router-view/>
       </v-container>
 
-      <app-footer></app-footer>
+      <app-footer app></app-footer>
     </v-main>
   </v-app>
 </template>

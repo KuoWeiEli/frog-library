@@ -1,72 +1,68 @@
 <template>
-  <v-card
-      class="mx-auto"
-      width="300"
+  <v-navigation-drawer
+      v-bind="$attrs"
+      v-model="drawer.isOpen"
+      app
+      fixed
+      clipped
   >
-    <v-navigation-drawer
-        v-model="drawer.isOpen"
-        app
-        fixed
-        clipped
-    >
-      <template v-slot:prepend>
-        <v-list-item class="px-3" link>
-          <v-list-item-avatar>
-            <v-img :src="user.id? user.avatar: require('../../assets/icon_employee_normal.svg')"></v-img>
-          </v-list-item-avatar>
+    <template v-slot:prepend>
+      <v-list-item class="px-3" link>
+        <v-list-item-avatar>
+          <v-img :src="user.id? user.avatar: require('../../assets/icon_employee_normal.svg')"></v-img>
+        </v-list-item-avatar>
 
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              {{ user.empid }}-{{ user.nameTW }}
-            </v-list-item-title>
-            <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-      </template>
-
-      <v-list-item>
         <v-list-item-content>
-          <v-list
-              dense
-              nav
-          >
-            <v-list-item
-                v-for="item in getItems"
-                :key="item.title"
-                :to="item.url"
-                link
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <v-list-item-title class="title">
+            {{ user.empid }}-{{ user.nameTW }}
+          </v-list-item-title>
+          <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
+      <v-divider></v-divider>
+    </template>
 
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn
-              v-if="!user.id"
-              block
-              to="/login">
-            登入
-          </v-btn>
-          <v-btn
-              v-if="user.id"
-              block
-              @click="signOut"
+    <v-list-item>
+      <v-list-item-content>
+        <v-list
+            dense
+            nav
+        >
+          <v-list-item
+              v-for="item in getItems"
+              :key="item.title"
+              :to="item.url"
+              link
           >
-            登出
-          </v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer>
-  </v-card>
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-list-item-content>
+    </v-list-item>
+
+    <template v-slot:append>
+      <div class="pa-2">
+        <v-btn
+            v-if="!user.id"
+            block
+            to="/login">
+          登入
+        </v-btn>
+        <v-btn
+            v-if="user.id"
+            block
+            @click="signOut"
+        >
+          登出
+        </v-btn>
+      </div>
+    </template>
+  </v-navigation-drawer>
 </template>
 <script>
 
