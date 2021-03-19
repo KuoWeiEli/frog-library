@@ -307,7 +307,7 @@ export default {
         reservation: [
           v => !!v || '請選擇預約時間！',
           v => !v || v.includes('~') || '無完整預約時段！請選擇預約「起日」與「訖日」兩個日期！',
-          v => !v || !v.includes('~') || this.calendar.reservationDate[1] >= (this.form.takeDate || this.form.verifyDate) || '預約訖日必須大於等於審核或是取書時間！'
+          v => !v || !v.includes('~') || !this.isManageMode || this.calendar.reservationDate[1] >= (this.form.takeDate || this.form.verifyDate) || '預約訖日必須大於等於審核或是取書時間！'
         ]
       }
     },

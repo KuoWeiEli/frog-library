@@ -197,8 +197,7 @@ export default {
             this.getRelatedMap(reservations)
                 .then(({bookReservationMap, userAvatarMap}) => {
                   // books
-                  this.items = books
-                  this.items.forEach(book => {
+                  books.forEach(book => {
                     // 依照 bookReservationMap 取得該 book 的預約陣列
                     book.reservationQueue = bookReservationMap[book.id]
                     // 如果該書有預約紀錄，依照 userAvatarMap 取得該 user 的大頭貼 Url
@@ -208,6 +207,7 @@ export default {
                             each.user.userAvatar = userAvatarMap[each.userID]
                           })
                   })
+                  this.items = books
                 });
           })
           .catch(err => {
