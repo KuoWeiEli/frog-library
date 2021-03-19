@@ -49,6 +49,7 @@
           </v-icon>
           查看
         </v-btn>
+        <v-spacer></v-spacer>
         <v-btn
             v-show="enabledReservation"
             x-small
